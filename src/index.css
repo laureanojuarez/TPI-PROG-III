@@ -1,3 +1,7 @@
+/* Color personalizado para el focus del input de búsqueda */
+.focus\:ring-custom-purple:focus {
+  --tw-ring-color: #7c00e2;
+}
 @import "tailwindcss";
 
 .nav-item {
@@ -10,7 +14,7 @@
   left: 0;
   bottom: 0;
   width: 0%;
-  height: 2px;
+  height: 1px;
   background: #7c00e2;
   transition: width 0.3s;
 }
