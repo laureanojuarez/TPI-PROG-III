@@ -12,7 +12,4 @@ function App() {
     <Layout>
       <AppRoutes />
     </Layout>
-  );
-}
-
 export default App;
