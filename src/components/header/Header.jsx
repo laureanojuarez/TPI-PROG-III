@@ -7,7 +7,7 @@ export const Header = () => {
         <div className="flex items-center justify-between w-full gap-8">
           <img src={logoMain} alt="Logo" className="h-12 w-auto" />
           <Search />
-          <ul className="flex gap-8 cursor-pointer items-center">
+          <ul className="flex cursor-pointer items-center">
             <li className="nav-item text-white font-semibold px-6 py-2 text-[16px]">
               Soporte
             </li>

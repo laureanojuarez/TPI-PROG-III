@@ -1,4 +1,3 @@
-/* Color personalizado para el focus del input de búsqueda */
 .focus\:ring-custom-purple:focus {
   --tw-ring-color: #7c00e2;
 }

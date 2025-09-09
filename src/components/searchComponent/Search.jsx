@@ -1,6 +1,4 @@
-import React from "react";
-
-export const Search = () => {
+export const Search = ({ data }) => {
   return (
     <div>
       <input
