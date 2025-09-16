@@ -1,7 +1,17 @@
 .focus\:ring-custom-purple:focus {
   --tw-ring-color: #7c00e2;
 }
+
 @import "tailwindcss";
+
+* {
+  font-family: "Poppins", sans-serif;
+  color: white;
+}
+
+body {
+  background-color: #080808; 
+}
 
 .nav-item {
   position: relative;
