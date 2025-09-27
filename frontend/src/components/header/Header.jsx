@@ -1,12 +1,12 @@
 import logoMain from "/header-img/logoMain.png";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 export const Header = () => {
   return (
-    <header className="header bg-black py-4 px-8">
+    <header className="header  py-4 px-8 fixed w-full bg-black/90 backdrop-blur-sm z-10">
       <nav className="flex flex-col items-center justify-between w-full">
         <div className="flex items-center justify-between w-full gap-8">
-          <Link to={"/"}>
+          <Link to={"/"} className="cursor-pointer">
             <img src={logoMain} alt="Logo" className="h-12 w-auto" />
           </Link>
           <ul className="flex cursor-pointer items-center">
