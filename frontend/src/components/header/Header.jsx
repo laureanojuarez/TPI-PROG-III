@@ -1,5 +1,6 @@
 import logoMain from "/header-img/logoMain.png";
 import {Link} from "react-router-dom";
+import {User} from "lucide-react";
 
 export const Header = () => {
   return (
@@ -9,16 +10,25 @@ export const Header = () => {
           <Link to={"/"} className="cursor-pointer">
             <img src={logoMain} alt="Logo" className="h-12 w-auto" />
           </Link>
-          <ul className="flex cursor-pointer items-center">
+
+          <ul className="flex cursor-pointer items-center gap-8">
             <Link
               to={"/soporte"}
-              className="nav-item text-white font-semibold px-6 py-2 text-[16px]"
+              className="nav-item text-white font-semibold text-[16px]"
             >
               Soporte
             </Link>
-            <li className="nav-item text-white font-semibold px-6 py-2 text-[16px]">
+
+            <Link
+              to={"/login"}
+              className="nav-item text-white font-semibold text-[16px]"
+            >
               Registrarse/Ingresar
-            </li>
+            </Link>
+
+            <Link to={"/perfil"} className="nav-item ">
+              <User color="white" />
+            </Link>
           </ul>
         </div>
       </nav>
