@@ -4,6 +4,8 @@ import {sequelize} from "./db.js";
 import {PORT} from "./config.js";
 
 import "./models/Event.js";
+import "./models/Users.js";
+import "./models/EventosUsuarios.js";
 const app = express();
 
 app.use(express.json());

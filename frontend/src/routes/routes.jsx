@@ -1,6 +1,7 @@
 import {Route, Routes} from "react-router-dom";
 import NotFoundPage from "../pages/NotFound";
 import Login from "../pages/Auth/Login/Login";
+import Register from "../pages/Auth/Register/Register";
 import FormPage from "../components/FormPage/FormPage";
 import App from "../App";
 import HomePage from "../pages/Home/HomePage";
@@ -19,6 +20,7 @@ export default function AppRoutes() {
       <Route path="/" element={<App />}>
         <Route index element={<HomePage />} />
         <Route path="login" element={<Login onLogin={handleLogin} />} />
+        <Route path="register" element={<Register />} />
         <Route path="soporte" element={<FormPage />} />
         <Route
           path="perfil"
