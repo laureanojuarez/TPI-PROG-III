@@ -1,5 +1,8 @@
-export default function ProtectedRoute({ children }) {
-  const isAuthenticated = false; // Replace with your authentication logic
+import {Navigate} from "react-router-dom";
 
-  return isAuthenticated ? children : <Navigate to="/login" />;
+export default function ProtectedRoute({isSignedIn, children}) {
+  if (!isSignedIn) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
 }
