@@ -5,12 +5,8 @@ import { PORT } from "./config.js";
 import cors from "cors";
 
 import "./models/Event.js";
-import "./models/User.js";
-import "./models/Pago.js";
-import "./models/EventosUsuario.js";
-import authRoutes from "./routes/auth.routes.js";
-import { json } from "sequelize";
-
+import "./models/Users.js";
+import "./models/EventosUsuarios.js";
 const app = express();
 app.use(cors());
 app.use(json());

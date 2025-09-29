@@ -38,22 +38,8 @@ export default function Login({ onLogin }) {
       return;
     }
 
-    setError({ email: false, password: false });
-    fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((res) => res.json())
-      .then((token) => {
-        localStorage.setItem("token", token);
-        navigate("/perfil");
-      })
-      .catch((err) => {
-        console.error("Error en el login", err);
-      });
+    onLogin();
+    navigate("/perfil");
   };
 
   return (
