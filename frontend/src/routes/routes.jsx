@@ -1,11 +1,11 @@
-import {Route, Routes} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import NotFoundPage from "../pages/NotFound";
 import Login from "../pages/Auth/Login/Login";
-import FormPage from "../components/FormPage/FormPage";
 import App from "../App";
 import HomePage from "../pages/Home/HomePage";
 import ProtectedRoute from "./ProtectedRoute";
-import {useState} from "react";
+import { useState } from "react";
+import Register from "../pages/Auth/Register/Register";
 
 export default function AppRoutes() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -19,7 +19,7 @@ export default function AppRoutes() {
       <Route path="/" element={<App />}>
         <Route index element={<HomePage />} />
         <Route path="login" element={<Login onLogin={handleLogin} />} />
-        <Route path="soporte" element={<FormPage />} />
+        <Route path="register" element={<Register />} />
         <Route
           path="perfil"
           element={
