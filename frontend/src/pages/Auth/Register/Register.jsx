@@ -1,17 +1,19 @@
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useRef, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 export default function Register() {
   const emailRef = useRef(null);
-  const userRef = useRef(null);
+  const usernameRef = useRef(null);
   const passwordRef = useRef(null);
   const confirmPasswordRef = useRef(null);
-  const [user, setUser] = useState("");
+  const [username, setUser] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
 
   const [error, setError] = useState({
+    username: false,
     email: false,
     password: false,
     confirmPassword: false,
@@ -19,52 +21,52 @@ export default function Register() {
 
   const handleUserChange = (e) => {
     setUser(e.target.value);
-    setError({ ...error, user: false });
+    setError({...error, user: false});
   };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setError({ ...error, email: false });
+    setError({...error, email: false});
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    setError({ ...error, password: false });
+    setError({...error, password: false});
   };
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
-    setError({ ...error, confirmPassword: false });
+    setError({...error, confirmPassword: false});
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!userRef.current.value.length) {
-      setError({ ...error, user: true });
-      userRef.current.focus();
+    if (!usernameRef.current.value.length) {
+      setError({...error, username: true});
+      usernameRef.current.focus();
       return;
     }
 
     if (!emailRef.current.value.length) {
-      setError({ ...error, email: true });
+      setError({...error, email: true});
       emailRef.current.focus();
       return;
     }
 
     if (!passwordRef.current.value.length) {
-      setError({ ...error, password: true });
+      setError({...error, password: true});
       passwordRef.current.focus();
       return;
     }
     if (!confirmPasswordRef.current.value.length) {
-      setError({ ...error, confirmPassword: true });
+      setError({...error, confirmPassword: true});
       confirmPasswordRef.current.focus();
       return;
     }
 
     if (password !== confirmPassword) {
-      setError({ ...error, password: true, confirmPassword: true });
+      setError({...error, password: true, confirmPassword: true});
       passwordRef.current.focus();
       return;
     }
@@ -82,8 +84,8 @@ export default function Register() {
     })
       .then((res) => res.json())
       .then(() => {
-        console.log("Login exitoso");
-        navigate("/perfil");
+        console.log("Usuario creado exitosamente");
+        navigate("/");
       })
       .catch((err) => {
         console.error("Error en el login", err);
@@ -100,14 +102,14 @@ export default function Register() {
           <label htmlFor="nombre">Usuario</label>
           <input
             type="text"
-            name="user"
-            ref={userRef}
-            value={user}
+            name="username"
+            ref={usernameRef}
+            value={username}
             onChange={handleUserChange}
             placeholder="Ingrese su usuario"
             className="p-2 w-full bg-white text-black"
           />
-          {error.user && (
+          {error.username && (
             <span className="text-red-500">
               El campo de usuario es obligatorio
             </span>
@@ -118,7 +120,7 @@ export default function Register() {
           <label htmlFor="nombre">Email</label>
           <input
             type="email"
-            name="user"
+            name="email"
             ref={emailRef}
             value={email}
             onChange={handleEmailChange}
