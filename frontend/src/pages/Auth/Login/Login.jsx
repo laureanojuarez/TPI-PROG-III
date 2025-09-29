@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useRef, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 
-export default function Login({ onLogin }) {
+export default function Login({onLogin}) {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const [email, setEmail] = useState("");
@@ -15,40 +15,41 @@ export default function Login({ onLogin }) {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setError({ ...error, email: false });
+    setError({...error, email: false});
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    setError({ ...error, password: false });
+    setError({...error, password: false});
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!emailRef.current.value.length) {
-      setError({ ...error, email: true });
+      setError({...error, email: true});
       emailRef.current.focus();
       return;
     }
 
     if (!passwordRef.current.value.length) {
-      setError({ ...error, password: true });
+      setError({...error, password: true});
       passwordRef.current.focus();
       return;
     }
 
-    setError({ email: false, password: false });
-    fetch("http://localhost:3000/api/auth/login", {
+    setError({email: false, password: false});
+    fetch("http://localhost:3000/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({email, password}),
     })
       .then((res) => res.json())
       .then((token) => {
         localStorage.setItem("token", token);
+        onLogin(true);
         navigate("/perfil");
       })
       .catch((err) => {
@@ -103,6 +104,9 @@ export default function Login({ onLogin }) {
         >
           Acceder
         </button>
+        <Link to="/register" className="mt-4 text-sm underline text-white">
+          No tenes cuenta? Registrate
+        </Link>
       </form>
     </main>
   );
