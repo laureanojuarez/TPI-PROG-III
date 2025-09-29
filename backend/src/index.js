@@ -7,7 +7,7 @@ import cors from "cors";
 import "./models/Event.js";
 import "./models/User.js";
 import "./models/Pago.js";
-import "./models/EventosUsuario.js";
+import "./models/EventoUsuario.js";
 import authRoutes from "./routes/auth.routes.js";
 import { json } from "sequelize";
 
