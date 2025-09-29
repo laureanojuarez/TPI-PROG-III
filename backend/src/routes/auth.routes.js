@@ -4,7 +4,7 @@ import {
   loginUser,
   registerUser,
 } from "../controllers/users.controller.js";
-import {verifyToken} from "../controllers/verify.controllers.js";
+import {verifyToken} from "../controllers/verify.controller.js";
 
 const router = Router();
 
