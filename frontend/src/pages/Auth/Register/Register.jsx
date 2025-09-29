@@ -62,8 +62,33 @@ export default function Register() {
       confirmPasswordRef.current.focus();
       return;
     }
-  };
 
+    if (password !== confirmPassword) {
+      setError({ ...error, password: true, confirmPassword: true });
+      passwordRef.current.focus();
+      return;
+    }
+
+    fetch("http://localhost:3000/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+      }),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        console.log("Login exitoso");
+        navigate("/perfil");
+      })
+      .catch((err) => {
+        console.error("Error en el login", err);
+      });
+  };
   return (
     <main className="min-h-screen text-white pt-10 flex flex-col items-center justify-center">
       <h1 className="text-2xl font-bold">Registrate!</h1>
