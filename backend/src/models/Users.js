@@ -1,13 +1,19 @@
 import {DataTypes} from "sequelize";
 import {sequelize} from "../db.js";
 
-export const Event = sequelize.define("event", {
+
+export const User = sequelize.define("user", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  location: {
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  password: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -15,24 +21,14 @@ export const Event = sequelize.define("event", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  artist: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  description: {
-    type: DataTypes.TEXT,
+  age: {
+    type: DataTypes.INTEGER,
     allowNull: true,
   },
-  date: {
-    type: DataTypes.DATE,
+    role: {
+    type: DataTypes.STRING,
     allowNull: false,
+    defaultValue: "user",
   },
-  price: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
-  },
-  tickets: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-});
+  
+}, {timestamps: false});
