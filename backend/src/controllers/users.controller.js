@@ -1,9 +1,10 @@
-import {User} from "../models/User.js";
+import { User } from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { validateLoginUser } from "../helpers/validations.js";
 
 export const registerUser = async (req, res) => {
-  const {username, email, password, age, role} = req.body;
+  const { username, email, password, age, role } = req.body;
 
   const user = await User.findOne({
     where: {
@@ -12,7 +13,7 @@ export const registerUser = async (req, res) => {
   });
 
   if (user) {
-    return res.status(400).json({message: "El usuario ya existe"});
+    return res.status(400).json({ message: "El usuario ya existe" });
   }
 
   const saltRounds = 10;
@@ -38,7 +39,13 @@ export const getUsers = async (req, res) => {
 };
 
 export const loginUser = async (req, res) => {
-  const {email, password} = req.body;
+  const result = validateLoginUser(req.body);
+
+  if (result.error) {
+    return res.status(400).send({ message: result.message });
+  }
+
+  const { email, password } = req.body;
 
   const user = await User.findOne({
     where: {
@@ -47,13 +54,13 @@ export const loginUser = async (req, res) => {
   });
 
   if (!user) {
-    return res.status(404).json({message: "Usuario no encontrado"});
+    return res.status(404).json({ message: "Usuario no encontrado" });
   }
 
   const comparison = await bcrypt.compare(password, user.password);
 
   if (!comparison) {
-    return res.status(401).json({message: "Email y/o contraseña incorrecta"});
+    return res.status(401).json({ message: "Email y/o contraseña incorrecta" });
   }
 
   const secretKey = "lucasoelschlager";
@@ -63,7 +70,7 @@ export const loginUser = async (req, res) => {
       email,
     },
     secretKey,
-    {expiresIn: "1h"}
+    { expiresIn: "1h" }
   );
 
   res.json(token);

@@ -1,7 +1,8 @@
-import {useRef, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import { useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { validateEmail, validatePassword } from "../auth.services";
 
-export default function Login({onLogin}) {
+export default function Login({ onLogin }) {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const [email, setEmail] = useState("");
@@ -15,44 +16,56 @@ export default function Login({onLogin}) {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setError({...error, email: false});
+    setError({ ...error, email: false });
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    setError({...error, password: false});
+    setError({ ...error, password: false });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!emailRef.current.value.length) {
-      setError({...error, email: true});
+    if (!emailRef.current.value.length || !validateEmail(email)) {
+      setError({ ...error, email: true });
       emailRef.current.focus();
       return;
     }
 
-    if (!passwordRef.current.value.length) {
-      setError({...error, password: true});
+    if (
+      !passwordRef.current.value.length ||
+      !validatePassword(password, 7, null, true, true)
+    ) {
+      setError({ ...error, password: true });
       passwordRef.current.focus();
       return;
     }
 
-    setError({email: false, password: false});
+    setError({ email: false, password: false });
+
     fetch("http://localhost:3000/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({email, password}),
+      body: JSON.stringify({ email, password }),
     })
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.message || "Error en el login");
+        }
+
+        return res.json();
+      })
       .then((token) => {
         localStorage.setItem("token", token);
-        onLogin(true);
+        onLogin();
         navigate("/perfil");
       })
       .catch((err) => {
+        alert(err.message);
         console.error("Error en el login", err);
       });
   };
