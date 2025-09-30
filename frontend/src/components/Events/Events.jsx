@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
-export const EventHero = ({ event }) => {
+export const EventHero = ({event}) => {
   return (
-    <Link to={`/event/${event.id}`} className="w-full">
+    <Link to={`/event/${event.id}`} className="w-full cursor-pointer">
       <section className="relative  w-full flex items-center justify-center rounded-lg overflow-hidden ">
         <img
           src={event.image}
@@ -24,9 +24,7 @@ export const EventHeroList = () => {
   );
 };
 
-export const EventCard = ({
-  event: { title, date, location, description },
-}) => {
+export const EventCard = ({event: {title, date, location, description}}) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-4">
       <h2 className="text-2xl font-bold mb-2">{title}</h2>
