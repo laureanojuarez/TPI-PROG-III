@@ -1,6 +1,6 @@
 import logoMain from "/header-img/logoMain.png";
-import {Link} from "react-router-dom";
-import {User} from "lucide-react";
+import { Link } from "react-router-dom";
+import { User } from "lucide-react";
 
 export const Header = () => {
   return (
@@ -17,13 +17,6 @@ export const Header = () => {
               className="nav-item text-white font-semibold text-[16px]"
             >
               Soporte
-            </Link>
-
-            <Link
-              to={"/login"}
-              className="nav-item text-white font-semibold text-[16px]"
-            >
-              Registrarse/Ingresar
             </Link>
 
             <Link to={"/perfil"} className="nav-item ">

@@ -7,6 +7,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import { useState } from "react";
 import Register from "../pages/Auth/Register/Register";
 import Profile from "../pages/profile/profile";
+import EventDetail from "../pages/Event/[id]";
 
 export default function AppRoutes() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -21,6 +22,7 @@ export default function AppRoutes() {
         <Route index element={<HomePage />} />
         <Route path="login" element={<Login onLogin={handleLogin} />} />
         <Route path="register" element={<Register />} />
+        <Route path="event/:id" element={<EventDetail />} />
         <Route
           path="perfil"
           element={
