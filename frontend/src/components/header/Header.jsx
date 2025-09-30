@@ -1,25 +1,38 @@
 import logoMain from "/header-img/logoMain.png";
-import {Link, useNavigate} from "react-router-dom";
-import {User} from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Menu } from "lucide-react";
+import { useState } from "react";
 
 export const Header = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const [open, setOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/login");
   };
 
+  const handleMenuToggle = () => {
+    setOpen(!open);
+  };
+
   return (
-    <header className="header  py-4 px-8 fixed w-full bg-black/70 backdrop-blur-sm z-10">
-      <nav className="flex flex-col items-center justify-between w-full">
+    <header className="header fixed w-full bg-black/70 backdrop-blur-sm z-10">
+      <nav className="flex flex-col items-center justify-between w-full px-6 py-4">
         <div className="flex items-center justify-between w-full">
           <Link to={"/"} className="cursor-pointer">
             <img src={logoMain} alt="Logo" className="h-12 w-auto" />
           </Link>
 
-          <ul className="flex cursor-pointer items-center gap-16 text-white">
+          <Menu
+            color="white"
+            cursor="pointer"
+            onClick={handleMenuToggle}
+            className="md:hidden"
+          />
+
+          <ul className="hidden cursor-pointer items-center gap-16 text-white md:flex">
             <Link to={"/soporte"} className="nav-item text-[16px]">
               Soporte
             </Link>
@@ -32,7 +45,7 @@ export const Header = () => {
                 <li
                   onClick={handleLogout}
                   className="nav-item  text-[16px]"
-                  style={{cursor: "pointer"}}
+                  style={{ cursor: "pointer" }}
                 >
                   Cerrar Sesión
                 </li>
@@ -44,6 +57,14 @@ export const Header = () => {
             )}
           </ul>
         </div>
+      </nav>
+      <nav
+        className={`w-full bg-black overflow-hidden transition-all duration-300 ease-out ${
+          open ? "max-h-24" : "max-h-0"
+        } md:hidden`}
+        style={{ height: open ? "6rem" : "0" }}
+      >
+        {/* Contenido del menú */}
       </nav>
     </header>
   );
