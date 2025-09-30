@@ -7,6 +7,7 @@ function App() {
   return (
     <Layout>
       <Header />
+      <div className="w-full h-20 bg-gradient-to-t from-gray-50 via-neutral-500 to-gray-900"></div>
       <Outlet />
       <Footer />
     </Layout>
