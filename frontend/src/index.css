@@ -1,11 +1,16 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import "tailwindcss";
+
 .focus\:ring-custom-purple:focus {
   --tw-ring-color: #7c00e2;
 }
 
-@import "tailwindcss";
-
 * {
-  font-family: "Poppins", sans-serif;
+ font-family: "Geist", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
 
 body {

@@ -2,17 +2,17 @@ import AreaSVG from "../../assets/area.svg?react";
 import "./area.css";
 
 export const Area = ({ setArea }) => {
-  // Maneja el click en cualquier parte del SVG
   const handleAreaClick = (e) => {
-    const id = e.target.id;
+    const group = e.target.closest("g");
+    const id = group?.id;
 
-    if (id === "b-sectorvip") {
+    if (id === "bg-vip") {
       setArea("Sector VIP");
     }
 
-    if (id === "b-general") {
+    if (id === "bg-general") {
       setArea("General");
     }
   };
-  return <AreaSVG onClick={handleAreaClick} />;
+  return <AreaSVG onClick={handleAreaClick} className="w-96 h-96" />;
 };
