@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { filterSearch } from "./filterSearch";
 
 export const Search = ({ onSearch }) => {
   const [input, setInput] = useState("");
 
-  const handleSearch = (event) => {
+  const handleSearch = async (event) => {
     if (event.key === "Enter" && input.trim() !== "") {
-      onSearch(input);
+      const results = await filterSearch({ data: input });
+      console.log(results);
     }
   };
   return (
