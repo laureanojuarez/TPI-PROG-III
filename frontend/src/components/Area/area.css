@@ -1,19 +1,19 @@
-#b-sectorvip {
+#bg-vip {
     transition: transform 0.3s ease;
     transform-origin: center;
 }
 
-#b-sectorvip:hover {
+#bg-vip:hover {
     cursor: pointer;
     transform: scale(1.05);
 }
 
-#b-general {
+#bg-general {
     transition: transform 0.3s ease;
     transform-origin: center;
 }
 
-#b-general:hover {
+#bg-general:hover {
     cursor: pointer;
     transform: scale(1.05);
 }

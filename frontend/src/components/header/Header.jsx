@@ -59,12 +59,13 @@ export const Header = () => {
         </div>
       </nav>
       <nav
-        className={`w-full bg-black overflow-hidden transition-all duration-300 ease-out ${
+        className={`w-full bg-black overflow-hidden transition-all duration-300 ease-out text-white ${
           open ? "max-h-24" : "max-h-0"
         } md:hidden`}
         style={{ height: open ? "6rem" : "0" }}
       >
         {/* Contenido del menú */}
+        <h1>HOLA</h1>
       </nav>
       <hr className="w-full h-px border-0 bg-gradient-to-r from-transparent via-white/20 to-transparent my-3" />
     </header>
