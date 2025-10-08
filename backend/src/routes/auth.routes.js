@@ -1,15 +1,19 @@
-import {Router} from "express";
+import { Router } from "express";
 import {
+  getMe,
+  getUserById,
   getUsers,
   loginUser,
   registerUser,
 } from "../controllers/users.controller.js";
-import {verifyToken} from "../controllers/verify.controller.js";
+import { verifyToken } from "../controllers/verify.controller.js";
 
 const router = Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/users", verifyToken, getUsers);
+router.get("/users/:id", verifyToken, getUserById);
+router.get("/me", verifyToken, getMe);
 
 export default router;
