@@ -59,8 +59,8 @@ export default function Login({ onLogin }) {
 
         return res.json();
       })
-      .then((token) => {
-        localStorage.setItem("token", token);
+      .then((data) => {
+        localStorage.setItem("token", data.token);
         onLogin();
         navigate("/perfil");
       })

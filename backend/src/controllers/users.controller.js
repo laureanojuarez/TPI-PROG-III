@@ -34,7 +34,9 @@ export const registerUser = async (req, res) => {
 };
 
 export const getUsers = async (req, res) => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    attributes: { exclude: ["password"] },
+  });
   res.json(users);
 };
 
@@ -67,11 +69,40 @@ export const loginUser = async (req, res) => {
 
   const token = jwt.sign(
     {
+      id: user.id,
       email,
     },
     secretKey,
     { expiresIn: "1h" }
   );
 
-  res.json(token);
+  res.json({
+    token,
+    user: {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    },
+  });
+};
+
+export const getUserById = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findByPk(id, {
+    attributes: { exclude: ["password"] },
+  });
+  if (!user) {
+    return res.status(404).json({ message: "Usuario no encontrado" });
+  }
+  res.json(user);
+};
+
+export const getMe = async (req, res) => {
+  const user = await User.findByPk(req.userId, {
+    attributes: { exclude: ["password"] },
+  });
+  if (!user) {
+    return res.status(404).json({ message: "Usuario no encontrado" });
+  }
+  res.json(user);
 };
