@@ -7,7 +7,7 @@ export const Search = ({ onSearch }) => {
   const handleSearch = async (event) => {
     if (event.key === "Enter" && input.trim() !== "") {
       const results = await filterSearch({ data: input });
-      if (onSearch) onSearch(results);
+      console.log(results);
     }
   };
   return (

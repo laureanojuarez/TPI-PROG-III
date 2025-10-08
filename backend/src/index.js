@@ -17,7 +17,6 @@ app.use(cors());
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/search", searchRoutes);
-
 try {
   await sequelize.sync();
   app.listen(PORT, () => console.log("Server listening on port", PORT));
