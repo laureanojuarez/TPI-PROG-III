@@ -14,6 +14,10 @@ app.use(cors());
 
 app.use(express.json());
 app.use("/auth", authRoutes);
+app.get("/search/:query", (req, res) => {
+  const { query } = req.params;
+  res.send(`Buscando: ${query}`);
+});
 
 try {
   await sequelize.sync();
