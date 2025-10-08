@@ -18,7 +18,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="header fixed w-full bg-black/70 backdrop-blur-sm z-10">
+    <header className="header fixed w-full bg-[#000] backdrop-blur-sm z-10">
       <nav className="flex flex-col items-center justify-between w-full px-6 py-4">
         <div className="flex items-center justify-between w-full">
           <Link to={"/"} className="cursor-pointer">
@@ -66,6 +66,7 @@ export const Header = () => {
       >
         {/* Contenido del menú */}
       </nav>
+      <hr className="w-full h-px border-0 bg-gradient-to-r from-transparent via-white/20 to-transparent my-3" />
     </header>
   );
 };
