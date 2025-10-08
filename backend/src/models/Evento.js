@@ -1,22 +1,29 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
 
-export const Pagos = sequelize.define("pagos", {
+export const Evento = sequelize.define("evento", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  total: {
-    type: DataTypes.DECIMAL(10, 2),
+  name: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
-  fecha_compra: {
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  location: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  date: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataTypes.NOW,
   },
-  metodo_pago: {
+  artist: {
     type: DataTypes.STRING,
     allowNull: false,
   },

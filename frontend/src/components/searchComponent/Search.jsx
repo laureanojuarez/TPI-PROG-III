@@ -1,0 +1,24 @@
+import { useState } from "react";
+import { filterSearch } from "./filterSearch";
+
+export const Search = ({ onSearch }) => {
+  const [input, setInput] = useState("");
+
+  const handleSearch = async (event) => {
+    if (event.key === "Enter" && input.trim() !== "") {
+      const results = await filterSearch({ data: input });
+      console.log(results);
+    }
+  };
+  return (
+    <div className="w-full pb-8 pt-30 flex flex-col items-center bg-[#000]">
+      <input
+        type="text"
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={handleSearch}
+        placeholder="Busca por evento o artista!"
+        className="w-full max-w-md border bg-[white] border-black p-2 rounded-lg transition-colors shadow-xl focus:outline-none focus:border-[#7c00e2] focus:ring-2 focus:ring-[#7c00e2] focus:bg-[#f3f4f6]"
+      />
+    </div>
+  );
+};

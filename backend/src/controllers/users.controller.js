@@ -1,5 +1,7 @@
 import { User } from "../models/User.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { validateLoginUser } from "../helpers/validations.js";
 
 export const registerUser = async (req, res) => {
   const { username, email, password, age, role } = req.body;
@@ -32,11 +34,19 @@ export const registerUser = async (req, res) => {
 };
 
 export const getUsers = async (req, res) => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    attributes: { exclude: ["password"] },
+  });
   res.json(users);
 };
 
 export const loginUser = async (req, res) => {
+  const result = validateLoginUser(req.body);
+
+  if (result.error) {
+    return res.status(400).send({ message: result.message });
+  }
+
   const { email, password } = req.body;
 
   const user = await User.findOne({
@@ -59,11 +69,40 @@ export const loginUser = async (req, res) => {
 
   const token = jwt.sign(
     {
+      id: user.id,
       email,
     },
     secretKey,
     { expiresIn: "1h" }
   );
 
-  res.json(token);
+  res.json({
+    token,
+    user: {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    },
+  });
+};
+
+export const getUserById = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findByPk(id, {
+    attributes: { exclude: ["password"] },
+  });
+  if (!user) {
+    return res.status(404).json({ message: "Usuario no encontrado" });
+  }
+  res.json(user);
+};
+
+export const getMe = async (req, res) => {
+  const user = await User.findByPk(req.userId, {
+    attributes: { exclude: ["password"] },
+  });
+  if (!user) {
+    return res.status(404).json({ message: "Usuario no encontrado" });
+  }
+  res.json(user);
 };

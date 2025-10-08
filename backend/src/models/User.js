@@ -30,6 +30,9 @@ export const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "user",
+      validate: {
+        isIn: [["user", "admin"]],
+      },
     },
   },
   { timestamps: false }

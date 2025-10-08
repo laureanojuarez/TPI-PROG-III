@@ -1,0 +1,19 @@
+#bg-vip {
+    transition: transform 0.3s ease;
+    transform-origin: center;
+}
+
+#bg-vip:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+#bg-general {
+    transition: transform 0.3s ease;
+    transform-origin: center;
+}
+
+#bg-general:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}

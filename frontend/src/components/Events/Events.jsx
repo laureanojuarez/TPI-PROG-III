@@ -1,27 +1,36 @@
-export const EventHero = () => {
+import { Link } from "react-router-dom";
+import { events } from "../../mock/events";
+
+export const EventHero = ({ event }) => {
   return (
-    <section
-      className="bg-gray-400 h-72
- w-full"
-    >
-      evento1
-    </section>
+    <Link to={`/event/${event.id}`} className="w-full cursor-pointer">
+      <section className="relative flex items-center justify-center rounded-lg overflow-hidden ">
+        <img
+          src={event.image}
+          alt=""
+          loading="lazy"
+          className="h-full w-full object-cover transform transition-transform duration-300 ease-in-out hover:scale-105 aspect-auto"
+        />
+      </section>
+    </Link>
   );
 };
 
-export const EventList = () => {
+export const EventHeroList = () => {
   return (
-    <div>
+    <div className="flex flex-col gap-4 ">
       {events.map((event) => (
-        <EventCard key={event.id} event={event} />
+        <EventHero key={event.id} event={event} />
       ))}
     </div>
   );
 };
 
-export const EventCard = ({event: {title, date, location, description}}) => {
+export const EventCard = ({
+  event: { title, date, location, description },
+}) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 m-4">
+    <div className="bg-white rounded-lg shadow-md p-4">
       <h2 className="text-2xl font-bold mb-2">{title}</h2>
       <p className="text-gray-600 mb-1">
         {new Date(date).toLocaleDateString()}
@@ -31,29 +40,3 @@ export const EventCard = ({event: {title, date, location, description}}) => {
     </div>
   );
 };
-
-const events = [
-  {
-    id: 1,
-    title: "Concierto de Rock",
-    date: "2023-10-15",
-    location: "Estadio Nacional",
-    description:
-      "Una noche llena de rock con bandas locales e internacionales.",
-  },
-  {
-    id: 2,
-    title: "Feria de Tecnología",
-    date: "2023-11-05",
-    location: "Centro de Convenciones",
-    description: "Explora las últimas innovaciones en tecnología y gadgets.",
-  },
-  {
-    id: 3,
-    title: "Festival de Cine",
-    date: "2023-12-01",
-    location: "Cineplex",
-    description:
-      "Disfruta de una selección de películas independientes y clásicas.",
-  },
-];
