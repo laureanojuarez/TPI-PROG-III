@@ -9,6 +9,7 @@ import Register from "../pages/Auth/Register/Register";
 import Profile from "../pages/profile/profile";
 import EventDetail from "../pages/Event/[id]";
 import { Soporte } from "../components/Soporte/Soporte";
+import CheckoutPage from "../pages/Checkout/Checkout";
 
 export default function AppRoutes() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -25,6 +26,7 @@ export default function AppRoutes() {
         <Route path="register" element={<Register />} />
         <Route path="soporte" element={<Soporte />} />
         <Route path="event/:id" element={<EventDetail />} />
+        <Route path="checkout" element={<CheckoutPage />} />
         <Route
           path="perfil"
           element={
