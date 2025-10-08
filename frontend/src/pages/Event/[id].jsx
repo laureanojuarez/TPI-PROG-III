@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { events } from "../../components/Events/Events";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { events } from "../../mock/events";
 
 export default function EventDetail() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const found = events.find((e) => e.id === parseInt(id));
@@ -38,12 +39,19 @@ export default function EventDetail() {
             {event.location} · {new Date(event.date).toLocaleDateString()}
           </p>
           <p className="text-gray-800 mb-6">{event.description}</p>
-          <Link
-            to="/"
-            className="inline-block text-sm text-white bg-indigo-600 px-4 py-2 rounded"
-          >
-            Volver
-          </Link>
+
+          {token ? (
+            <Link
+              to="/checkout"
+              className="inline-block text-sm text-white bg-indigo-600 px-4 py-2 rounded"
+            >
+              Comprar
+            </Link>
+          ) : (
+            <Link to="/login">
+              Para comprar entradas tenes que iniciar sesion
+            </Link>
+          )}
         </div>
       </div>
     </div>
