@@ -6,9 +6,8 @@ import Register from "../pages/Auth/Register/Register";
 import EventDetail from "../pages/Event/[id]";
 import { Soporte } from "../components/Soporte/Soporte";
 import CheckoutPage from "../pages/Checkout/Checkout";
+import { RenderSearch } from "../components/searchComponent/renderSearch";
 import Protected from "./Protected";
-import Dashboard from "../pages/Dashboard/Dashboard";
-import App from "../App";
 
 export default function AppRoutes() {
   return (
@@ -21,8 +20,9 @@ export default function AppRoutes() {
           <Route path="soporte" element={<Soporte />} />
           <Route path="event/:id" element={<EventDetail />} />
           <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="/resultados" element={<RenderSearch />} />
           <Route element={<Protected />}>
-            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="perfil" element={<Profile />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Route>
