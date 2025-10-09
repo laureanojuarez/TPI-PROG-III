@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 
-export const RenderSearch = () => {
+export default function Resultados() {
   const location = useLocation();
   const resultados = location.state?.resultados || [];
   console.log("Location state:", location.state);
@@ -39,4 +39,4 @@ export const RenderSearch = () => {
       ))}
     </div>
   );
-};
+}
