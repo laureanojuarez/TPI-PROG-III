@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
 
-export default function Profile() {
+export default function Dashboard() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 

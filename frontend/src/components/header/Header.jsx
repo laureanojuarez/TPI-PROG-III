@@ -36,7 +36,7 @@ export const Header = () => {
 
             {token ? (
               <>
-                <Link to={"/perfil"} className="nav-item">
+                <Link to={"/dashboard"} className="nav-item">
                   <li className="nav-item text-[16px]">Mis entradas</li>
                 </Link>
                 <li
