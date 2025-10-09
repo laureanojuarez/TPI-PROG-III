@@ -67,23 +67,9 @@ export const loginUser = async (req, res) => {
 
   const secretKey = "lucasoelschlager";
 
-  const token = jwt.sign(
-    {
-      id: user.id,
-      email,
-    },
-    secretKey,
-    { expiresIn: "1h" }
-  );
+  const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
 
-  res.json({
-    token,
-    user: {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-    },
-  });
+  res.json(token);
 };
 
 export const getUserById = async (req, res) => {
