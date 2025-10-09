@@ -2,16 +2,13 @@ import logoMain from "/header-img/logoMain.png";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../services/auth/auth.context";
 
 export const Header = () => {
-  const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const [open, setOpen] = useState(false);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
+  const { handleUserLogout } = useContext(AuthContext);
 
   const handleMenuToggle = () => {
     setOpen(!open);
@@ -43,7 +40,7 @@ export const Header = () => {
                   <li className="nav-item text-[16px]">Mis entradas</li>
                 </Link>
                 <li
-                  onClick={handleLogout}
+                  onClick={handleUserLogout}
                   className="nav-item  text-[16px]"
                   style={{ cursor: "pointer" }}
                 >

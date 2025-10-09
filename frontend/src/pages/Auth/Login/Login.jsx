@@ -1,13 +1,16 @@
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { validateEmail, validatePassword } from "../auth.services";
+import { useContext } from "react";
+import { AuthContext } from "../../../services/auth/auth.context";
 
-export default function Login({ onLogin }) {
+export default function Login() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { handleUserLogin } = useContext(AuthContext);
 
   const [error, setError] = useState({
     email: false,
@@ -51,18 +54,10 @@ export default function Login({ onLogin }) {
       },
       body: JSON.stringify({ email, password }),
     })
-      .then(async (res) => {
-        if (!res.ok) {
-          const errData = await res.json();
-          throw new Error(errData.message || "Error en el login");
-        }
-
-        return res.json();
-      })
-      .then((data) => {
-        localStorage.setItem("token", data.token);
-        onLogin();
-        navigate("/perfil");
+      .then((res) => res.json())
+      .then((token) => {
+        handleUserLogin(token);
+        navigate("/");
       })
       .catch((err) => {
         alert(err.message);

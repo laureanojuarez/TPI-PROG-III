@@ -8,15 +8,17 @@ import "./models/User.js";
 import "./models/Pago.js";
 import "./models/DetalleVenta.js";
 import authRoutes from "./routes/auth.routes.js";
-
 import searchRoutes from "./routes/search.routes.js";
+import eventRoutes from "./routes/event.routes.js";
 
 const app = express();
 app.use(cors());
 
 app.use(express.json());
 app.use("/auth", authRoutes);
+app.use("/event", eventRoutes);
 app.use("/search", searchRoutes);
+
 try {
   await sequelize.sync();
   app.listen(PORT, () => console.log("Server listening on port", PORT));
