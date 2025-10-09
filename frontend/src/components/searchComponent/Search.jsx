@@ -1,12 +1,19 @@
 import { useState } from "react";
 import { filterSearch } from "./filterSearch";
+import { useNavigate } from "react-router-dom";
 
 export const Search = ({ onSearch }) => {
   const [input, setInput] = useState("");
+  const [resultados, setResultados] = useState([]);
+  const navigate = useNavigate();
 
   const handleSearch = async (event) => {
     if (event.key === "Enter" && input.trim() !== "") {
-      const results = await filterSearch({ data: input });
+      const results = await filterSearch(input);
+
+      if (results) {
+        navigate("/resultados", { state: { resultados: results } });
+      }
       console.log(results);
     }
   };

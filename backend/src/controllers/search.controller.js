@@ -8,8 +8,8 @@ export const getEvents = async (req, res) => {
     const events = await Evento.findAll({
       where: {
         [Op.or]: [
-          { name: { [Op.like]: `%${q}%` } },
-          { description: { [Op.like]: `%${q}%` } },
+          { name: { [Op.substring]: `%${q}%` } },
+          { description: { [Op.substring]: `%${q}%` } },
         ],
       },
     });
