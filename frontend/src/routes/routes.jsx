@@ -3,13 +3,14 @@ import NotFoundPage from "../pages/NotFound";
 import Login from "../pages/Auth/Login/Login";
 import App from "../App";
 import HomePage from "../pages/Home/HomePage";
-import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "./Protected";
 import { useState } from "react";
 import Register from "../pages/Auth/Register/Register";
 import Profile from "../pages/profile/profile";
 import EventDetail from "../pages/Event/[id]";
 import { Soporte } from "../components/Soporte/Soporte";
 import CheckoutPage from "../pages/Checkout/Checkout";
+import Protected from "./Protected";
 
 export default function AppRoutes() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -30,9 +31,9 @@ export default function AppRoutes() {
         <Route
           path="perfil"
           element={
-            <ProtectedRoute isSignedIn={loggedIn}>
+            <Protected>
               <Profile />
-            </ProtectedRoute>
+            </Protected>
           }
         />
         <Route path="*" element={<NotFoundPage />} />
