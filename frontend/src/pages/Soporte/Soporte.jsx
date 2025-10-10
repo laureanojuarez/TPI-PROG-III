@@ -1,4 +1,4 @@
-export const Soporte = () => {
+export default function Soporte() {
   return (
     <>
       <div className="bg-[url('https://billboard.ar/wp-content/uploads/2025/03/6769d56f16bec8fc4c4c3782_arb_dia1__mazza.ph-01164-1-scaled.jpeg')] w-full h-[800px] flex items-center justify-center gap-20">
@@ -91,4 +91,4 @@ export const Soporte = () => {
       </div>
     </>
   );
-};
+}

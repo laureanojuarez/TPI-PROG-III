@@ -1,12 +1,22 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import { Header } from "../header/Header";
+import { Footer } from "../Footer/Footer";
 
-export default function Layout({ children }) {
+export default function Layout() {
   const { pathname } = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
-  return <main className="w-full h-auto flex flex-col">{children}</main>;
+  return (
+    <div className="layout">
+      <Header />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
 }
