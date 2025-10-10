@@ -1,15 +1,35 @@
-import { Footer } from "./components/Footer/Footer";
-import { Header } from "./components/header/Header";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
-import { Outlet } from "react-router-dom";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Auth/Login/Login";
+import Register from "./pages/Auth/Register/Register";
+import Soporte from "./pages/Soporte/Soporte";
+import EventDetail from "./pages/Event/[id]";
+import CheckoutPage from "./pages/Checkout/Checkout";
+import Resultados from "./pages/Event/Resultado";
+import Protected from "./routes/Protected";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import NotFoundPage from "./routes/NotFound";
 
 function App() {
   return (
-    <Layout>
-      <Header />
-      <Outlet />
-      <Footer />
-    </Layout>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="soporte" element={<Soporte />} />
+          <Route path="event/:id" element={<EventDetail />} />
+          <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="resultados" element={<Resultados />} />
+          <Route element={<Protected />}>
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 export default App;
