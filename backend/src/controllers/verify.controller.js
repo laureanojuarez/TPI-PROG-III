@@ -11,6 +11,7 @@ export const verifyToken = (req, res, next) => {
 
   try {
     const payload = jwt.verify(token, secretKey);
+    req.email = payload.email;
     console.log(payload);
     next();
   } catch (err) {

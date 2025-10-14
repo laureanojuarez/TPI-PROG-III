@@ -84,7 +84,8 @@ export const getUserById = async (req, res) => {
 };
 
 export const getMe = async (req, res) => {
-  const user = await User.findByPk(req.userId, {
+  const user = await User.findOne({
+    where: { email: req.email },
     attributes: { exclude: ["password"] },
   });
   if (!user) {

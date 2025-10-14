@@ -18,7 +18,7 @@ export const Search = ({ onSearch }) => {
     }
   };
   return (
-    <div className="w-full pb-8 pt-30 flex flex-col items-center bg-[#000]">
+    <div className="w-full pb-8 pt-10 flex flex-col items-center bg-[#000]">
       <input
         type="text"
         onChange={(e) => setInput(e.target.value)}

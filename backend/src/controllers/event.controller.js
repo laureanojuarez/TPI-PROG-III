@@ -28,3 +28,29 @@ export const getAllEvents = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const comprarEntrada = async (req, res) => {
+  try {
+    const { id_evento, sector, cantidad, subtotal } = req.body;
+    const id_usuario = req.userId; // O req.email si usas email
+
+    // Verifica que el evento exista
+    const evento = await Evento.findByPk(id_evento);
+    if (!evento) {
+      return res.status(404).json({ message: "Evento no encontrado" });
+    }
+
+    // Crea el detalle de venta
+    const detalle = await DetalleVenta.create({
+      id_evento,
+      id_usuario,
+      sector,
+      cantidad,
+      subtotal,
+    });
+
+    res.status(201).json({ message: "Compra realizada", detalle });
+  } catch (error) {
+    res.status(500).json({ message: "Error al comprar entrada", error });
+  }
+};
