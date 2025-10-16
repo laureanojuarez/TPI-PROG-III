@@ -1,14 +1,14 @@
 import logoMain from "/header-img/logoMain.png";
-import { Link, useNavigate } from "react-router-dom";
-import { Menu } from "lucide-react";
-import { useState } from "react";
-import { useContext } from "react";
-import { AuthContext } from "../../services/auth/auth.context";
+import {Link} from "react-router-dom";
+import {Menu} from "lucide-react";
+import {useState} from "react";
+import {useContext} from "react";
+import {AuthContext} from "../../services/auth/auth.context";
 
 export const Header = () => {
   const token = localStorage.getItem("token");
   const [open, setOpen] = useState(false);
-  const { handleUserLogout } = useContext(AuthContext);
+  const {handleUserLogout} = useContext(AuthContext);
 
   const handleMenuToggle = () => {
     setOpen(!open);
@@ -42,7 +42,7 @@ export const Header = () => {
                 <li
                   onClick={handleUserLogout}
                   className="nav-item  text-[16px]"
-                  style={{ cursor: "pointer" }}
+                  style={{cursor: "pointer"}}
                 >
                   Cerrar Sesión
                 </li>
@@ -59,7 +59,7 @@ export const Header = () => {
         className={`w-full bg-black overflow-hidden transition-all duration-300 ease-out text-white ${
           open ? "max-h-24" : "max-h-0"
         } md:hidden`}
-        style={{ height: open ? "6rem" : "0" }}
+        style={{height: open ? "6rem" : "0"}}
       >
         {/* Contenido del menú */}
         <h1>HOLA</h1>

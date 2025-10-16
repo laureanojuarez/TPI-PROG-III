@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { validateEmail, validatePassword } from "../auth.services";
-import { useContext } from "react";
-import { AuthContext } from "../../../services/auth/auth.context";
+import {useRef, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import {validateEmail, validatePassword} from "./auth.services";
+import {useContext} from "react";
+import {AuthContext} from "../../../services/auth/auth.context";
 
 export default function Login() {
   const emailRef = useRef(null);
@@ -10,7 +10,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { handleUserLogin } = useContext(AuthContext);
+  const {handleUserLogin} = useContext(AuthContext);
 
   const [error, setError] = useState({
     email: false,
@@ -19,19 +19,19 @@ export default function Login() {
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setError({ ...error, email: false });
+    setError({...error, email: false});
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    setError({ ...error, password: false });
+    setError({...error, password: false});
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!emailRef.current.value.length || !validateEmail(email)) {
-      setError({ ...error, email: true });
+      setError({...error, email: true});
       emailRef.current.focus();
       return;
     }
@@ -40,21 +40,28 @@ export default function Login() {
       !passwordRef.current.value.length ||
       !validatePassword(password, 7, null, true, true)
     ) {
-      setError({ ...error, password: true });
+      setError({...error, password: true});
       passwordRef.current.focus();
       return;
     }
 
-    setError({ email: false, password: false });
+    setError({email: false, password: false});
 
     fetch("http://localhost:3000/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({email, password}),
     })
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.message || "Error en el login");
+        }
+
+        return res.json();
+      })
       .then((token) => {
         handleUserLogin(token);
         navigate("/");
