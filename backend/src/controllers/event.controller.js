@@ -29,6 +29,21 @@ export const getAllEvents = async (req, res) => {
   }
 };
 
+export const getEventById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const event = await Evento.findByPk(id);
+    if (!event) {
+      return res.status(404).json({ message: "Evento no encontrado" });
+    }
+    res.status(200).json(event);
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export const comprarEntrada = async (req, res) => {
   try {
     const { id_evento, sector, cantidad, subtotal } = req.body;

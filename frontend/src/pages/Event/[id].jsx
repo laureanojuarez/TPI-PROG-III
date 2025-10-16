@@ -1,15 +1,28 @@
+import { useContext } from "react";
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { events } from "../../mock/events";
+import { Link, useParams } from "react-router-dom";
+import { AuthContext } from "../../services/auth/auth.context";
 
 export default function EventDetail() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
-  const token = localStorage.getItem("token");
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
-    const found = events.find((e) => e.id === parseInt(id));
-    setEvent(found);
+    const fetchEvent = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/event/${id}`);
+        if (!res.ok) {
+          setEvent(null);
+          return;
+        }
+        const data = await res.json();
+        setEvent(data);
+      } catch (error) {
+        setEvent(null);
+      }
+    };
+    fetchEvent();
   }, [id]);
 
   if (!event) {
@@ -29,12 +42,12 @@ export default function EventDetail() {
         <div className="w-full h-64 md:h-96 overflow-hidden">
           <img
             src={event.image}
-            alt={event.title}
+            alt={event.name}
             className="w-full  object-cover"
           />
         </div>
         <div className="p-6">
-          <h1 className="text-3xl font-bold mb-2">{event.title}</h1>
+          <h1 className="text-3xl font-bold mb-2">{event.name}</h1>
           <p className="text-gray-600 mb-4">
             {event.location} · {new Date(event.date).toLocaleDateString()}
           </p>
