@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Auth/Login/Login";
@@ -10,6 +10,7 @@ import Resultados from "./pages/Event/Resultado";
 import Protected from "./routes/Protected";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import NotFoundPage from "./routes/NotFound";
+import Admin from "./pages/Dashboard/Admin";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="resultados" element={<Resultados />} />
           <Route element={<Protected />}>
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="admin" element={<Admin />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Route>

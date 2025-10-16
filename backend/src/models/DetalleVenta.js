@@ -10,6 +10,11 @@ export const DetalleVenta = sequelize.define("detalle_venta", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+
+  sector: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   cantidad: {
     type: DataTypes.INTEGER,
     allowNull: false,

@@ -13,7 +13,7 @@ export default function Layout() {
   return (
     <div className="layout">
       <Header />
-      <main>
+      <main className="pt-20">
         <Outlet />
       </main>
       <Footer />

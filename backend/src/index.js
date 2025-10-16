@@ -1,12 +1,21 @@
 import express from "express";
-import { sequelize } from "./db.js";
-import { PORT } from "./config.js";
+import {sequelize} from "./db.js";
+import {PORT} from "./config.js";
 import cors from "cors";
 
 import "./models/Evento.js";
 import "./models/User.js";
-import "./models/Pago.js";
 import "./models/DetalleVenta.js";
+import {User} from "./models/User.js";
+import {DetalleVenta} from "./models/DetalleVenta.js";
+import {Evento} from "./models/Evento.js";
+
+User.hasMany(DetalleVenta, {foreignKey: "userId"});
+DetalleVenta.belongsTo(User, {foreignKey: "userId"});
+
+Evento.hasMany(DetalleVenta, {foreignKey: "eventoId"});
+DetalleVenta.belongsTo(Evento, {foreignKey: "eventoId"});
+
 import authRoutes from "./routes/auth.routes.js";
 import searchRoutes from "./routes/search.routes.js";
 import eventRoutes from "./routes/event.routes.js";
