@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Link} from "react-router-dom";
 
 export default function Dashboard() {
   const [username, setUsername] = useState("");
@@ -13,17 +13,18 @@ export default function Dashboard() {
     const fetchUser = async () => {
       try {
         const userRes = await fetch("http://localhost:3000/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {Authorization: `Bearer ${token}`},
         });
         const userData = await userRes.json();
         setUsername(userData.username);
         setEmail(userData.email);
+        console.log(userData);
         setRole(userData.role);
 
         const entradasRes = await fetch(
           "http://localhost:3000/auth/me/entradas",
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {Authorization: `Bearer ${token}`},
           }
         );
         const entradasData = await entradasRes.json();
