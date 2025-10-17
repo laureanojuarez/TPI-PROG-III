@@ -5,12 +5,12 @@ import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register/Register";
 import Soporte from "./pages/Soporte/Soporte";
 import EventDetail from "./pages/Event/[id]";
-import CheckoutPage from "./pages/Checkout/Checkout";
 import Resultados from "./pages/Event/Resultado";
 import Protected from "./routes/Protected";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import NotFoundPage from "./routes/NotFound";
 import Admin from "./pages/Dashboard/Admin";
+import Checkout from "./pages/Checkout/Checkout";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="soporte" element={<Soporte />} />
           <Route path="event/:id" element={<EventDetail />} />
-          <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="checkout/:id" element={<Checkout />} />
           <Route path="resultados" element={<Resultados />} />
           <Route element={<Protected />}>
             <Route path="dashboard" element={<Dashboard />} />
