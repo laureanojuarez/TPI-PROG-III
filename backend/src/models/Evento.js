@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../db.js";
+import {DataTypes} from "sequelize";
+import {sequelize} from "../db.js";
 
 export const Evento = sequelize.define("evento", {
   id: {
@@ -27,7 +27,7 @@ export const Evento = sequelize.define("evento", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  src: {
+  poster: {
     type: DataTypes.STRING,
     allowNull: false,
   },
