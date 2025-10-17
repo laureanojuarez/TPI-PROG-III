@@ -1,8 +1,10 @@
-import { useContext, useState } from "react";
-import { AuthContext } from "../../services/auth/auth.context";
+import {useContext, useState} from "react";
+import {AuthContext} from "../../services/auth/auth.context";
+import {useEvents} from "../../hooks/useEvents";
 
 export default function Admin() {
-  const { token } = useContext(AuthContext);
+  const {token} = useContext(AuthContext);
+  const {events, loading, refetch} = useEvents();
 
   const [eventData, setEventData] = useState({
     name: "",
@@ -10,11 +12,12 @@ export default function Admin() {
     location: "",
     date: "",
     artist: "",
+    poster: "",
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEventData({ ...eventData, [name]: value });
+    const {name, value} = e.target;
+    setEventData({...eventData, [name]: value});
   };
 
   const handleSubmit = async (e) => {
@@ -31,8 +34,30 @@ export default function Admin() {
       });
       const data = await res.json();
       console.log("Evento creado:", data);
+      refetch();
     } catch (error) {
       console.error("Error al enviar el formulario:", error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const confirmed = window.confirm(
+        "¿Estás seguro de que deseas eliminar este evento?"
+      );
+      if (!confirmed) return;
+
+      const res = await fetch(`http://localhost:3000/event/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      console.log("Evento eliminado:", data);
+      refetch();
+    } catch (error) {
+      console.error("Error al eliminar el evento:", error);
     }
   };
 
@@ -43,52 +68,162 @@ export default function Admin() {
         <p className="text-gray-600">
           Aquí puedes gestionar usuarios, eventos y más.
         </p>
-        <form onSubmit={handleSubmit}>
-          <div className="flex flex-col">
-            <h2>Agregar Evento</h2>
-            <label htmlFor="name">Nombre:</label>
-            <input
-              type="text"
-              name="name"
-              value={eventData.name}
-              onChange={handleChange}
-            />
-
-            <label htmlFor="description">Descripcion:</label>
-            <input
-              type="text"
-              name="description"
-              value={eventData.description}
-              onChange={handleChange}
-            />
-
-            <label htmlFor="location">Ubicacion:</label>
-            <input
-              type="text"
-              name="location"
-              value={eventData.location}
-              onChange={handleChange}
-            />
-
-            <label htmlFor="date">Fecha:</label>
-            <input
-              type="text"
-              name="date"
-              value={eventData.date}
-              onChange={handleChange}
-            />
-
-            <label htmlFor="artist">Artista:</label>
-            <input
-              type="text"
-              name="artist"
-              value={eventData.artist}
-              onChange={handleChange}
-            />
-
-            <button type="submit">Enviar</button>
+        <form
+          onSubmit={handleSubmit}
+          className="bg-gray-50 rounded-lg p-6 shadow mb-8"
+        >
+          <h2 className="text-xl font-semibold mb-4 text-indigo-700 flex items-center gap-2">
+            <span>🎫</span> Agregar Nuevo Evento
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-gray-700 font-medium mb-1"
+              >
+                Nombre del evento
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                placeholder="Ej: Festival Primavera"
+                value={eventData.name}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="artist"
+                className="block text-gray-700 font-medium mb-1"
+              >
+                Artista principal
+              </label>
+              <input
+                type="text"
+                name="artist"
+                id="artist"
+                placeholder="Ej: Soda Stereo"
+                value={eventData.artist}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="location"
+                className="block text-gray-700 font-medium mb-1"
+              >
+                Ubicación
+              </label>
+              <input
+                type="text"
+                name="location"
+                id="location"
+                placeholder="Ej: Teatro Colón"
+                value={eventData.location}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="date"
+                className="block text-gray-700 font-medium mb-1"
+              >
+                Fecha
+              </label>
+              <input
+                type="date"
+                name="date"
+                id="date"
+                value={eventData.date}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label
+                htmlFor="poster"
+                className="block text-gray-700 font-medium mb-1"
+              >
+                URL del poster
+              </label>
+              <input
+                type="text"
+                name="poster"
+                id="poster"
+                placeholder="https://ejemplo.com/poster.jpg"
+                value={eventData.poster}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label
+                htmlFor="description"
+                className="block text-gray-700 font-medium mb-1"
+              >
+                Descripción
+              </label>
+              <textarea
+                name="description"
+                id="description"
+                placeholder="Contanos sobre el evento..."
+                value={eventData.description}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                rows={3}
+                required
+              />
+            </div>
           </div>
+          <button
+            type="submit"
+            className="mt-6 w-full bg-indigo-600 text-white font-semibold py-2 rounded hover:bg-indigo-700 transition"
+          >
+            Crear evento
+          </button>
         </form>
+
+        <section>
+          <h2 className="text-2xl font-bold mb-4 mt-8">Eventos Existentes</h2>
+          {loading ? (
+            <p>Cargando eventos...</p>
+          ) : events.length > 0 ? (
+            <ul className="space-y-2">
+              {events.map((event) => (
+                <div className="flex border rounded mb-4" key={event.id}>
+                  <li className="p-3 bg-gray-50 w-full">
+                    <span className="font-medium text-blue-700">
+                      {event.name}
+                    </span>
+                    <p className="text-gray-600">{event.description}</p>
+                    <p className="text-gray-600">
+                      Fecha: {new Date(event.date).toLocaleDateString()}
+                    </p>
+                    <p className="text-gray-600">Ubicación: {event.location}</p>
+                    <p className="text-gray-600">Artista: {event.artist}</p>
+                  </li>
+                  <button
+                    className="flex items-center justify-center text-center p-4 bg-red-400 cursor-pointer"
+                    onClick={() => handleDelete(event.id)}
+                  >
+                    <p>Eliminar evento</p>
+                  </button>
+                </div>
+              ))}
+            </ul>
+          ) : (
+            <p>No hay eventos disponibles.</p>
+          )}
+        </section>
       </div>
     </div>
   );

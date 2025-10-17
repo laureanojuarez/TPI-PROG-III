@@ -37,6 +37,14 @@ export default function Dashboard() {
     fetchUser();
   }, []);
 
+  if (!username) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Cargando...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center pt-16">
       <div className="w-full max-w-xl bg-white rounded-lg shadow-md p-8 relative">
