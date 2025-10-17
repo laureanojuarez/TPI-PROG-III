@@ -65,6 +65,28 @@ export const deleteEvent = async (req, res) => {
   }
 };
 
+export const updateEvent = async (req, res) => {
+  const {id} = req.params;
+  const {name, description, date, location, artist, poster} = req.body;
+
+  try {
+    const [updated] = await Evento.update(
+      {name, description, date, location, artist, poster},
+      {where: {id}}
+    );
+
+    if (updated) {
+      const updatedEvent = await Evento.findByPk(id);
+      return res.status(200).json(updatedEvent);
+    }
+
+    res.status(404).json({message: "Evento no encontrado"});
+  } catch (error) {
+    console.error("Error updating event:", error);
+    res.status(500).json({error: "Internal server error"});
+  }
+};
+
 export const comprarEntrada = async (req, res) => {
   try {
     const {id_evento, sector, cantidad, subtotal} = req.body;

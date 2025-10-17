@@ -5,6 +5,7 @@ import {useEvents} from "../../hooks/useEvents";
 export default function Admin() {
   const {token} = useContext(AuthContext);
   const {events, loading, refetch} = useEvents();
+  const [editingEvent, setEditingEvent] = useState(null);
 
   const [eventData, setEventData] = useState({
     name: "",
@@ -20,7 +21,7 @@ export default function Admin() {
     setEventData({...eventData, [name]: value});
   };
 
-  const handleSubmit = async (e) => {
+  const handleCreate = async (e) => {
     e.preventDefault();
 
     try {
@@ -37,6 +38,37 @@ export default function Admin() {
       refetch();
     } catch (error) {
       console.error("Error al enviar el formulario:", error);
+    }
+  };
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(
+        `http://localhost:3000/event/${editingEvent.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          method: "PUT",
+          body: JSON.stringify(eventData),
+        }
+      );
+      const data = await res.json();
+      console.log("Evento actualizado:", data);
+      setEditingEvent(null);
+      setEventData({
+        name: "",
+        description: "",
+        location: "",
+        date: "",
+        artist: "",
+        poster: "",
+      });
+      refetch();
+    } catch (error) {
+      console.error("Error al editar el evento:", error);
     }
   };
 
@@ -61,6 +93,18 @@ export default function Admin() {
     }
   };
 
+  const startEdit = (event) => {
+    setEditingEvent(event);
+    setEventData({
+      name: event.name,
+      description: event.description,
+      location: event.location,
+      date: event.date.slice(0, 10),
+      artist: event.artist,
+      poster: event.poster,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center pt-16">
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-8">
@@ -69,11 +113,12 @@ export default function Admin() {
           Aquí puedes gestionar usuarios, eventos y más.
         </p>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={editingEvent ? handleEdit : handleCreate}
           className="bg-gray-50 rounded-lg p-6 shadow mb-8"
         >
           <h2 className="text-xl font-semibold mb-4 text-indigo-700 flex items-center gap-2">
-            <span>🎫</span> Agregar Nuevo Evento
+            <span>🎫</span>{" "}
+            {editingEvent ? "Editar Evento" : "Agregar Nuevo Evento"}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -188,8 +233,27 @@ export default function Admin() {
             type="submit"
             className="mt-6 w-full bg-indigo-600 text-white font-semibold py-2 rounded hover:bg-indigo-700 transition"
           >
-            Crear evento
+            {editingEvent ? "Guardar Cambios" : "Crear Evento"}
           </button>
+          {editingEvent && (
+            <button
+              type="button"
+              className="mt-2 w-full bg-gray-300 text-gray-800 font-semibold py-2 rounded hover:bg-gray-400 transition"
+              onClick={() => {
+                setEditingEvent(null);
+                setEventData({
+                  name: "",
+                  description: "",
+                  location: "",
+                  date: "",
+                  artist: "",
+                  poster: "",
+                });
+              }}
+            >
+              Cancelar edicion
+            </button>
+          )}
         </form>
 
         <section>
@@ -211,6 +275,12 @@ export default function Admin() {
                     <p className="text-gray-600">Ubicación: {event.location}</p>
                     <p className="text-gray-600">Artista: {event.artist}</p>
                   </li>
+                  <button
+                    className="flex items-center justify-center text-center p-4 bg-yellow-400 cursor-pointer"
+                    onClick={() => startEdit(event)}
+                  >
+                    <p>Editar evento</p>
+                  </button>
                   <button
                     className="flex items-center justify-center text-center p-4 bg-red-400 cursor-pointer"
                     onClick={() => handleDelete(event.id)}
