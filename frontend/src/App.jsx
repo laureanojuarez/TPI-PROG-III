@@ -7,10 +7,10 @@ import Soporte from "./pages/Soporte/Soporte";
 import EventDetail from "./pages/Event/[id]";
 import Resultados from "./pages/Event/Resultado";
 import Protected from "./routes/Protected";
-import Dashboard from "./pages/Dashboard/Dashboard";
 import NotFoundPage from "./routes/NotFound";
 import Admin from "./pages/Dashboard/Admin";
 import Checkout from "./pages/Checkout/Checkout";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 function App() {
   return (

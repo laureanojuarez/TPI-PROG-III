@@ -1,5 +1,6 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Link} from "react-router-dom";
+import {AuthContext} from "../../services/auth/auth.context";
 
 export default function Dashboard() {
   const [username, setUsername] = useState("");
@@ -7,8 +8,20 @@ export default function Dashboard() {
   const [role, setRole] = useState("");
   const [entradas, setEntradas] = useState([]);
 
+  const {token} = useContext(AuthContext);
+
+  if (!token) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Debes iniciar sesión para ver tu Dashboard.</p>
+        <Link to="/login" className="text-indigo-600 ml-2">
+          Ir al login
+        </Link>
+      </div>
+    );
+  }
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (!token) return;
     const fetchUser = async () => {
       try {
@@ -18,24 +31,16 @@ export default function Dashboard() {
         const userData = await userRes.json();
         setUsername(userData.username);
         setEmail(userData.email);
-        console.log(userData);
         setRole(userData.role);
-
-        const entradasRes = await fetch(
-          "http://localhost:3000/auth/me/entradas",
-          {
-            headers: {Authorization: `Bearer ${token}`},
-          }
-        );
-        const entradasData = await entradasRes.json();
-        setEntradas(entradasData);
+        setEntradas(userData.detalle_venta || []);
+        console.log("Entradas del usuario:", userData.detalle_venta);
       } catch (error) {
         console.error("Error cargando datos:", error);
       }
     };
 
     fetchUser();
-  }, []);
+  }, [token]);
 
   if (!username) {
     return (
@@ -73,9 +78,21 @@ export default function Dashboard() {
                 className="border rounded p-3 bg-gray-50 flex flex-col"
               >
                 <span className="font-medium text-blue-700">
-                  Evento: {entrada.eventoNombre}
+                  Evento: {entrada.evento ? entrada.evento.name : "Sin nombre"}
                 </span>
-                <span className="text-gray-600">Fecha: {entrada.fecha}</span>
+                <span className="text-gray-600">
+                  Fecha:{" "}
+                  {entrada.evento
+                    ? new Date(entrada.evento.date).toLocaleDateString()
+                    : ""}
+                </span>
+                <span className="text-gray-600">Sector: {entrada.sector}</span>
+                <span className="text-gray-600">
+                  Cantidad: {entrada.cantidad}
+                </span>
+                <span className="text-gray-600">
+                  Subtotal: ${entrada.subtotal}
+                </span>
               </li>
             ))
           )}
