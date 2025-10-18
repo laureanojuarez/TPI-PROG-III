@@ -2,9 +2,8 @@ import { useState } from "react";
 import { filterSearch } from "./filterSearch";
 import { useNavigate } from "react-router-dom";
 
-export const Search = ({ onSearch }) => {
+export const Search = () => {
   const [input, setInput] = useState("");
-  const [resultados, setResultados] = useState([]);
   const navigate = useNavigate();
 
   const handleSearch = async (event) => {
