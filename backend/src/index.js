@@ -10,11 +10,11 @@ import {User} from "./models/User.js";
 import {DetalleVenta} from "./models/DetalleVenta.js";
 import {Evento} from "./models/Evento.js";
 
-User.hasMany(DetalleVenta, {foreignKey: "userId"});
-DetalleVenta.belongsTo(User, {foreignKey: "userId"});
+User.hasMany(DetalleVenta, {foreignKey: "id_usuario"});
+DetalleVenta.belongsTo(User, {foreignKey: "id_usuario"});
 
-Evento.hasMany(DetalleVenta, {foreignKey: "eventoId"});
-DetalleVenta.belongsTo(Evento, {foreignKey: "eventoId"});
+Evento.hasMany(DetalleVenta, {foreignKey: "id_evento"});
+DetalleVenta.belongsTo(Evento, {foreignKey: "id_evento"});
 
 import authRoutes from "./routes/auth.routes.js";
 import searchRoutes from "./routes/search.routes.js";

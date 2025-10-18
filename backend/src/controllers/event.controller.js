@@ -1,5 +1,6 @@
 import {DetalleVenta} from "../models/DetalleVenta.js";
 import {Evento} from "../models/Evento.js";
+import {User} from "../models/User.js";
 
 export const registerEvent = async (req, res) => {
   const {name, description, date, location, artist, poster} = req.body;
@@ -65,10 +66,34 @@ export const deleteEvent = async (req, res) => {
   }
 };
 
+export const updateEvent = async (req, res) => {
+  const {id} = req.params;
+  const {name, description, date, location, artist, poster} = req.body;
+
+  try {
+    const [updated] = await Evento.update(
+      {name, description, date, location, artist, poster},
+      {where: {id}}
+    );
+
+    if (updated) {
+      const updatedEvent = await Evento.findByPk(id);
+      return res.status(200).json(updatedEvent);
+    }
+
+    res.status(404).json({message: "Evento no encontrado"});
+  } catch (error) {
+    console.error("Error updating event:", error);
+    res.status(500).json({error: "Internal server error"});
+  }
+};
+
 export const comprarEntrada = async (req, res) => {
   try {
     const {id_evento, sector, cantidad, subtotal} = req.body;
-    const id_usuario = req.userId; // O req.email si usas email
+    const {email} = req;
+    const user = await User.findOne({where: {email}});
+    if (!user) return res.status(404).json({message: "Usuario no encontrado"});
 
     // Verifica que el evento exista
     const evento = await Evento.findByPk(id_evento);
@@ -79,7 +104,7 @@ export const comprarEntrada = async (req, res) => {
     // Crea el detalle de venta
     const detalle = await DetalleVenta.create({
       id_evento,
-      id_usuario,
+      id_usuario: user.id,
       sector,
       cantidad,
       subtotal,

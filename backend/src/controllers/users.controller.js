@@ -2,6 +2,8 @@ import {User} from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {validateLoginUser} from "../helpers/validations.js";
+import {DetalleVenta} from "../models/DetalleVenta.js";
+import {Evento} from "../models/Evento.js";
 
 export const registerUser = async (req, res) => {
   const {username, email, password, age, role} = req.body;
@@ -84,6 +86,17 @@ export const getMe = async (req, res) => {
   const user = await User.findOne({
     where: {email: req.email},
     attributes: {exclude: ["password"]},
+    include: [
+      {
+        model: DetalleVenta,
+        include: [
+          {
+            model: Evento,
+            attributes: ["id", "name", "date", "location", "artist", "poster"],
+          },
+        ],
+      },
+    ],
   });
   if (!user) {
     return res.status(404).json({message: "Usuario no encontrado"});

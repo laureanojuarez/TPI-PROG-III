@@ -1,4 +1,4 @@
-import { Router } from "express";
+import {Router} from "express";
 import {
   getMe,
   getUserById,
@@ -6,7 +6,7 @@ import {
   loginUser,
   registerUser,
 } from "../controllers/users.controller.js";
-import { verifyToken } from "../controllers/verify.controller.js";
+import {verifyToken} from "../controllers/verify.controller.js";
 
 const router = Router();
 
@@ -15,5 +15,6 @@ router.post("/login", loginUser);
 router.get("/users", verifyToken, getUsers);
 router.get("/users/:id", verifyToken, getUserById);
 router.get("/me", verifyToken, getMe);
+router.get("/me/entradas", verifyToken, getMe);
 
 export default router;
