@@ -1,12 +1,12 @@
-import { useContext } from "react";
-import { Link, useParams } from "react-router-dom";
-import { AuthContext } from "../../services/auth/auth.context";
-import { useEventDetail } from "../../hooks/useEventDetail";
+import {useContext} from "react";
+import {Link, useParams} from "react-router-dom";
+import {AuthContext} from "../../services/auth/auth.context";
+import {useEventDetail} from "../../hooks/useEventDetail";
 
 export default function EventDetail() {
-  const { token } = useContext(AuthContext);
-  const { id } = useParams();
-  const { event, loading } = useEventDetail(id);
+  const {token} = useContext(AuthContext);
+  const {id} = useParams();
+  const {event, loading} = useEventDetail(id);
 
   if (!event) {
     return (
@@ -30,7 +30,7 @@ export default function EventDetail() {
       }}
     >
       <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row items-stretch bg-transparent px-4 py-10">
-        <div className="md:w-2/3 flex flex-col justify-center pr-0 md:pr-10">
+        <div className="md:w-2/3 flex flex-col justify-center text-center">
           <h2 className="text-lg font-semibold text-gray-200 mb-2">
             {new Date(event.date).toLocaleDateString("es-ES", {
               day: "2-digit",
