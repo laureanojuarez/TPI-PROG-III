@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../db.js";
+import {DataTypes} from "sequelize";
+import {sequelize} from "../db.js";
 
 export const User = sequelize.define(
   "user",
@@ -27,13 +27,10 @@ export const User = sequelize.define(
       allowNull: true,
     },
     role: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM("user", "admin", "superadmin"),
       allowNull: false,
       defaultValue: "user",
-      validate: {
-        isIn: [["user", "admin"]],
-      },
     },
   },
-  { timestamps: false }
+  {timestamps: false}
 );
