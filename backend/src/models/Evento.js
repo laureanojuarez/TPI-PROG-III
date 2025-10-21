@@ -31,4 +31,8 @@ export const Evento = sequelize.define("evento", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  posterHorizontal: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });

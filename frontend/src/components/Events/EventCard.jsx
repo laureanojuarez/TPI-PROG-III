@@ -1,6 +1,6 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export const EventCard = ({event: {id, name, poster, location, date}}) => {
+export const EventCard = ({ event: { id, name, poster, location, date } }) => {
   return (
     <Link
       to={`/event/${id}`}

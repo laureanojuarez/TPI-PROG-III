@@ -1,6 +1,6 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 
-export const PersonalData = ({data, onSave}) => {
+export const PersonalData = ({ data, onSave }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
 
@@ -11,7 +11,7 @@ export const PersonalData = ({data, onSave}) => {
 
   const handleSubmit = (e) => {
     e?.preventDefault();
-    if (onSave) onSave({username, email});
+    if (onSave) onSave({ username, email });
   };
 
   return (

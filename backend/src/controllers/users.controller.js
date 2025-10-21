@@ -86,6 +86,22 @@ export const getUserById = async (req, res) => {
   res.json(user);
 };
 
+export const removeAdminRole = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findByPk(id);
+  try {
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    user.role = "user";
+    await user.save();
+    res.json({ message: "Rol de administrador removido" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error al remover rol de administrador" });
+  }
+};
+
 export const getMe = async (req, res) => {
   const user = await User.findOne({
     where: { email: req.email },

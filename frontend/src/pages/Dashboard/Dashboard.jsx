@@ -1,11 +1,11 @@
-import {useContext} from "react";
-import {Link} from "react-router-dom";
-import {AuthContext} from "../../services/auth/auth.context";
-import {useUserData} from "../../hooks/useUserData";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../../services/auth/auth.context";
+import { useUserData } from "../../hooks/useUserData";
 
 export default function Dashboard() {
-  const {token} = useContext(AuthContext);
-  const {user, entradas, loading} = useUserData();
+  const { token } = useContext(AuthContext);
+  const { user, entradas, loading } = useUserData();
 
   if (!token) {
     return (
@@ -26,7 +26,7 @@ export default function Dashboard() {
     );
   }
 
-  const {username, email, role} = user;
+  const { username, email, role } = user;
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center pt-16">
@@ -44,6 +44,14 @@ export default function Dashboard() {
               className="md:w-auto w-full py-2 px-6  bg-blue-600 text-white rounded hover:bg-blue-700 transition text-center"
             >
               Ir a Admin
+            </Link>
+          )}
+          {role === "superadmin" && (
+            <Link
+              to="/superadmin"
+              className="md:w-auto w-full py-2 px-6  bg-blue-600 text-white rounded hover:bg-blue-700 transition text-center"
+            >
+              Ir a Super Admin
             </Link>
           )}
         </div>

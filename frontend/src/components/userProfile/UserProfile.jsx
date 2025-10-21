@@ -1,11 +1,11 @@
-import {useState} from "react";
-import {PersonalData} from "./PersonalData";
-import {ChangePassword} from "./ChangePassword";
-import {useUserData} from "../../hooks/useUserData";
+import { useState } from "react";
+import { PersonalData } from "./PersonalData";
+import { ChangePassword } from "./ChangePassword";
+import { useUserData } from "../../hooks/useUserData";
 
 export default function UserProfile() {
   const [option, setOption] = useState("personal");
-  const {user, entradas, loading} = useUserData();
+  const { user, entradas, loading } = useUserData();
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
