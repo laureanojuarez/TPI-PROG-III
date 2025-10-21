@@ -2,20 +2,21 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../services/auth/auth.context";
 import { useEvents } from "../../hooks/useEvents";
 
+const initialEventData = {
+  name: "",
+  description: "",
+  location: "",
+  date: "",
+  artist: "",
+  poster: "",
+  posterHorizontal: "",
+};
+
 export default function Admin() {
   const { token } = useContext(AuthContext);
   const { events, loading, refetch } = useEvents();
   const [editingEvent, setEditingEvent] = useState(null);
-
-  const [eventData, setEventData] = useState({
-    name: "",
-    description: "",
-    location: "",
-    date: "",
-    artist: "",
-    poster: "",
-    posterHorizontal: "",
-  });
+  const [eventData, setEventData] = useState(initialEventData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,15 +60,7 @@ export default function Admin() {
       const data = await res.json();
       console.log("Evento actualizado:", data);
       setEditingEvent(null);
-      setEventData({
-        name: "",
-        description: "",
-        location: "",
-        date: "",
-        artist: "",
-        poster: "",
-        posterHorizontal: "",
-      });
+      setEventData(initialEventData);
       refetch();
     } catch (error) {
       console.error("Error al editar el evento:", error);
@@ -254,14 +247,7 @@ export default function Admin() {
               className="mt-2 w-full bg-gray-300 text-gray-800 font-semibold py-2 rounded hover:bg-gray-400 transition"
               onClick={() => {
                 setEditingEvent(null);
-                setEventData({
-                  name: "",
-                  description: "",
-                  location: "",
-                  date: "",
-                  artist: "",
-                  poster: "",
-                });
+                setEventData(initialEventData);
               }}
             >
               Cancelar edicion
@@ -274,33 +260,47 @@ export default function Admin() {
           {loading ? (
             <p>Cargando eventos...</p>
           ) : events.length > 0 ? (
-            <ul className="space-y-2">
+            <ul className="flex flex-col gap-4">
               {events.map((event) => (
-                <div className="flex border rounded mb-4" key={event.id}>
-                  <li className="p-3 bg-gray-50 w-full">
-                    <span className="font-medium text-blue-700">
+                <li
+                  key={event.id}
+                  className="flex flex-col md:flex-row items-start md:items-center border rounded p-4 bg-gray-50"
+                >
+                  <div className="flex-1 mb-4 md:mb-0">
+                    <span className="block font-medium text-blue-700 text-lg">
                       {event.name}
                     </span>
-                    <p className="text-gray-600">{event.description}</p>
-                    <p className="text-gray-600">
-                      Fecha: {new Date(event.date).toLocaleDateString()}
+                    <p className="text-gray-600 max-h-24 overflow-y-auto">
+                      {event.description}
                     </p>
-                    <p className="text-gray-600">Ubicación: {event.location}</p>
-                    <p className="text-gray-600">Artista: {event.artist}</p>
-                  </li>
-                  <button
-                    className="flex items-center justify-center text-center p-4 bg-yellow-400 cursor-pointer"
-                    onClick={() => startEdit(event)}
-                  >
-                    <p>Editar evento</p>
-                  </button>
-                  <button
-                    className="flex items-center justify-center text-center p-4 bg-red-400 cursor-pointer"
-                    onClick={() => handleDelete(event.id)}
-                  >
-                    <p>Eliminar evento</p>
-                  </button>
-                </div>
+                    <p className="text-gray-600">
+                      <span className="font-semibold">Fecha:</span>{" "}
+                      {new Date(event.date).toLocaleDateString()}
+                    </p>
+                    <p className="text-gray-600">
+                      <span className="font-semibold">Ubicación:</span>{" "}
+                      {event.location}
+                    </p>
+                    <p className="text-gray-600">
+                      <span className="font-semibold">Artista:</span>{" "}
+                      {event.artist}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      className="px-4 py-2 bg-yellow-400 rounded hover:bg-yellow-500 font-semibold transition"
+                      onClick={() => startEdit(event)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-red-400 rounded hover:bg-red-500 font-semibold transition"
+                      onClick={() => handleDelete(event.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </li>
               ))}
             </ul>
           ) : (

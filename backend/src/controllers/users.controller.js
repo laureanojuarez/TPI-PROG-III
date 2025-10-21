@@ -123,3 +123,38 @@ export const getMe = async (req, res) => {
   }
   res.json(user);
 };
+
+export const changeProfile = async (req, res) => {
+  const { id } = req.params;
+  const { username, email, age } = req.body;
+
+  try {
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    if (username !== undefined) {
+      user.username = username;
+    }
+
+    if (email !== undefined) {
+      user.email = email;
+    }
+    if (age <= 18) {
+      return res
+        .status(400)
+        .json({ message: "La edad debe ser mayor a 18 años" });
+    }
+
+    if (age !== undefined) {
+      user.age = age;
+    }
+
+    await user.save();
+    res.json({ message: "Perfil actualizado" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al actualizar el perfil" });
+  }
+};

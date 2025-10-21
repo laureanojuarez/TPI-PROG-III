@@ -10,8 +10,11 @@ export const PersonalData = ({ data, onSave }) => {
   }, [data]);
 
   const handleSubmit = (e) => {
-    e?.preventDefault();
-    if (onSave) onSave({ username, email });
+    e.preventDefault();
+    const payload = {};
+    if (username !== data.username) payload.username = username;
+    if (email !== data.email) payload.email = email;
+    if (onSave) onSave(payload);
   };
 
   return (
