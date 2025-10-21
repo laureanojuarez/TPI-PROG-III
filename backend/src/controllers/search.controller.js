@@ -9,6 +9,7 @@ export const getEvents = async (req, res) => {
       where: {
         [Op.or]: [
           { name: { [Op.substring]: `%${q}%` } },
+          { artist: { [Op.substring]: `%${q}%` } },
           { description: { [Op.substring]: `%${q}%` } },
         ],
       },

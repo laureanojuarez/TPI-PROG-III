@@ -13,7 +13,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className="fixed w-full bg-black/90 backdrop-blur-sm z-10 py-3 flex items-center justify-between px-6 shadow">
+      <header className="fixed w-full bg-black/70 backdrop-blur-sm z-10 py-3 flex items-center justify-between px-6 shadow">
         <Link to="/" className="cursor-pointer flex items-center gap-2">
           <img src={logoMain} alt="Logo" className="h-12 w-auto" />
         </Link>
