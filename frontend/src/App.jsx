@@ -11,6 +11,7 @@ import NotFoundPage from "./routes/NotFound";
 import Admin from "./pages/Dashboard/Admin";
 import Checkout from "./pages/Checkout/Checkout";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import UserProfile from "./components/userProfile/UserProfile";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route element={<Protected />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="admin" element={<Admin />} />
+            <Route path="perfil" element={<UserProfile />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Route>

@@ -12,7 +12,7 @@ export const DetalleVenta = sequelize.define("detalle_venta", {
   },
 
   sector: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM("General", "VIP"),
     allowNull: false,
   },
   cantidad: {
