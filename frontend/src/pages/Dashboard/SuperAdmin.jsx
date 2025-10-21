@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useUsersAdmin } from "../../hooks/useUsersAdmin";
 
 export const SuperAdmin = () => {

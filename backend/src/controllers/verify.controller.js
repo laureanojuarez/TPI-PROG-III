@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 export const verifyToken = (req, res, next) => {
   const secretKey = "lucasoelschlager";
 
-  const header = req.header("Authorization" || "");
+  const header = req.header("Authorization") || "";
   if (!header) {
     return res.status(401).json({ message: "No posee autorizacion requerida" });
   }

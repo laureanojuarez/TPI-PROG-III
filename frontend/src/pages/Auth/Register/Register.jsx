@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { validateRegisterUser } from "../auth.services";
 
 export default function Register() {
   const emailRef = useRef(null);
@@ -10,6 +11,8 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [registerError, setRegisterError] = useState("");
+
   const navigate = useNavigate();
 
   const [error, setError] = useState({
@@ -41,6 +44,20 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const validation = validateRegisterUser({
+      username,
+      email,
+      password,
+      confirmPassword,
+    });
+
+    if (validation.error) {
+      setRegisterError(validation.message);
+      return;
+    }
+
+    setRegisterError("");
 
     if (!usernameRef.current.value.length) {
       setError({ ...error, username: true });
@@ -98,6 +115,11 @@ export default function Register() {
         onSubmit={handleSubmit}
         className="w-96 flex flex-col items-center bg-[#040404] p-10 gap-4 h-auto rounded-lg mt-5"
       >
+        {registerError && (
+          <div className="w-full mb-2 text-center text-red-500 font-semibold">
+            {registerError}
+          </div>
+        )}
         <div className="flex gap-2 flex-col w-full">
           <label htmlFor="nombre">Usuario</label>
           <input

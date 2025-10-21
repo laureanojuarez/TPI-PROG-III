@@ -17,14 +17,31 @@ export const Search = () => {
     }
   };
   return (
-    <div className="w-full pb-8 pt-10 flex flex-col items-center bg-[#000]">
+    <div className="w-full pb-8 pt-10 flex  items-center max-w-2xl mx-auto">
+      <label htmlFor="search" className="sr-only">
+        Buscar evento o artista
+      </label>
       <input
         type="text"
+        value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleSearch}
-        placeholder="Busca por evento o artista!"
-        className="w-full max-w-md border bg-[white] border-black p-2 rounded-lg transition-colors shadow-xl focus:outline-none focus:border-[#7c00e2] focus:ring-2 focus:ring-[#7c00e2] focus:bg-[#f3f4f6] py-2"
+        placeholder="Busca por evento o artista"
+        className="flex-1 border bg-white border-gray-300  rounded-l-lg transition-colors shadow focus:outline-none focus:border-gray-500 focus:ring-1 focus:ring-gray-400 focus:bg-gray-50 py-2 px-4"
       />
+      <button
+        onClick={async () => {
+          if (input.trim() !== "") {
+            const results = await filterSearch(input);
+            if (results) {
+              navigate("/resultados", { state: { resultados: results } });
+            }
+          }
+        }}
+        className="bg-white border border-gray-300 text-gray-700 py-3 px-4 rounded-r-lg font-semibold hover:bg-gray-100 transition"
+      >
+        Buscar
+      </button>
     </div>
   );
 };

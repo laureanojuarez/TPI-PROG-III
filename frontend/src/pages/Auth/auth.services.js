@@ -46,3 +46,42 @@ export const validateLoginUser = (req) => {
 
   return result;
 };
+
+export const validateRegisterUser = (req) => {
+  const result = {
+    error: false,
+    message: "",
+  };
+
+  const { username, email, password, confirmPassword } = req;
+
+  if (!username || !validateString(username, 3, 30)) {
+    return {
+      error: true,
+      message: "Nombre de usuario incorrecto",
+    };
+  }
+
+  if (!email || !validateEmail(email)) {
+    return {
+      error: true,
+      message: "Email incorrecto",
+    };
+  }
+
+  if (!password || !validatePassword(password, 7, null, true, true)) {
+    return {
+      error: true,
+      message: "Contraseña incorrecta",
+    };
+  }
+
+  if (password !== confirmPassword) {
+    return {
+      error: true,
+      message: "Las contraseñas no coinciden",
+    };
+  }
+
+  return result;
+};

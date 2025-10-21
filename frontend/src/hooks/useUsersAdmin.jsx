@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect, useCallback } from "react";
 import { AuthContext } from "../services/auth/auth.context";
-import { data } from "react-router-dom";
 
 export const useUsersAdmin = () => {
   const { token } = useContext(AuthContext);

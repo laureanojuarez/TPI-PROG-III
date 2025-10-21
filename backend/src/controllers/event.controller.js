@@ -3,7 +3,15 @@ import { Evento } from "../models/Evento.js";
 import { User } from "../models/User.js";
 
 export const registerEvent = async (req, res) => {
-  const { name, description, date, location, artist, poster } = req.body;
+  const {
+    name,
+    description,
+    date,
+    location,
+    artist,
+    poster,
+    posterHorizontal,
+  } = req.body;
 
   try {
     const newEvent = await Evento.create({

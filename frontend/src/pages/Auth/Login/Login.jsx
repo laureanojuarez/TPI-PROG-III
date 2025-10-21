@@ -1,8 +1,8 @@
-import {useRef, useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
-import {validateEmail, validatePassword} from "./auth.services";
-import {useContext} from "react";
-import {AuthContext} from "../../../services/auth/auth.context";
+import { useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { validateEmail, validatePassword } from "../auth.services";
+import { useContext } from "react";
+import { AuthContext } from "../../../services/auth/auth.context";
 
 export default function Login() {
   const emailRef = useRef(null);
@@ -10,28 +10,29 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const {handleUserLogin} = useContext(AuthContext);
+  const { handleUserLogin } = useContext(AuthContext);
 
   const [error, setError] = useState({
     email: false,
     password: false,
   });
+  const [loginError, setLoginError] = useState("");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setError({...error, email: false});
+    setError({ ...error, email: false });
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    setError({...error, password: false});
+    setError({ ...error, password: false });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!emailRef.current.value.length || !validateEmail(email)) {
-      setError({...error, email: true});
+      setError({ ...error, email: true });
       emailRef.current.focus();
       return;
     }
@@ -40,19 +41,20 @@ export default function Login() {
       !passwordRef.current.value.length ||
       !validatePassword(password, 7, null, true, true)
     ) {
-      setError({...error, password: true});
+      setError({ ...error, password: true });
       passwordRef.current.focus();
       return;
     }
 
-    setError({email: false, password: false});
+    setError({ email: false, password: false });
+    setLoginError("");
 
     fetch("http://localhost:3000/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({email, password}),
+      body: JSON.stringify({ email, password }),
     })
       .then(async (res) => {
         if (!res.ok) {
@@ -67,7 +69,7 @@ export default function Login() {
         navigate("/");
       })
       .catch((err) => {
-        alert(err.message);
+        setLoginError(err.message);
         console.error("Error en el login", err);
       });
   };
@@ -77,8 +79,13 @@ export default function Login() {
       <h1 className="text-2xl font-bold">Iniciar Sesión!</h1>
       <form
         onSubmit={handleSubmit}
-        className="w-96 flex flex-col items-center bg-[#040404] p-10 gap-4 h-auto rounded-lg mt-5"
+        className="w-96 flex flex-col items-center bg-[#040404] p-10 gap-4 h-auto rounded-lg"
       >
+        {loginError && (
+          <div className="w-full mb-2 text-center text-red-500 font-semibold">
+            {loginError}
+          </div>
+        )}
         <div className="flex gap-2 flex-col w-full">
           <label htmlFor="nombre">Email</label>
           <input
