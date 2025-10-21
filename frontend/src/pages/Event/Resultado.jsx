@@ -1,6 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-export const RenderSearch = () => {
+export default function Resultados() {
   const location = useLocation();
   const resultados = location.state?.resultados || [];
   console.log("Location state:", location.state);
@@ -70,15 +70,12 @@ export const RenderSearch = () => {
           </div>
 
           <div className="mt-4 flex justify-end">
-            <Link
-              to={`/event/${e.id}`}
-              className="bg-[#7c00e2] text-white px-4 py-2 rounded hover:bg-[#5a00b0] transition-colors"
-            >
+            <button className="bg-[#7c00e2] text-white px-4 py-2 rounded hover:bg-[#5a00b0] transition-colors">
               Ver más
-            </Link>
+            </button>
           </div>
         </div>
       ))}
     </div>
   );
-};
+}

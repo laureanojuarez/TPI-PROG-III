@@ -27,4 +27,8 @@ export const Evento = sequelize.define("evento", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  urlImg: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
