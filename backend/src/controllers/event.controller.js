@@ -92,6 +92,17 @@ export const comprarEntrada = async (req, res) => {
   try {
     const {id_evento, sector, cantidad, subtotal} = req.body;
     const {email} = req;
+
+    if (!id_evento || !sector || !cantidad || !subtotal) {
+      return res
+        .status(400)
+        .json({message: "Faltan datos obligatorios para la compra"});
+    }
+    const sectoresValidos = ["General", "VIP"];
+    if (!sectoresValidos.includes(sector)) {
+      return res.status(400).json({message: "Sector inválido"});
+    }
+
     const user = await User.findOne({where: {email}});
     if (!user) return res.status(404).json({message: "Usuario no encontrado"});
 
@@ -112,6 +123,7 @@ export const comprarEntrada = async (req, res) => {
 
     res.status(201).json({message: "Compra realizada", detalle});
   } catch (error) {
+    console.error("Error al comprar entrada:", error);
     res.status(500).json({message: "Error al comprar entrada", error});
   }
 };

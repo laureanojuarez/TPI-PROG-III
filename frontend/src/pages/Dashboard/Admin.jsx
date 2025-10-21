@@ -75,7 +75,7 @@ export default function Admin() {
   const handleDelete = async (id) => {
     try {
       const confirmed = window.confirm(
-        "¿Estás seguro de que deseas eliminar este evento?"
+        "¿Estas seguro de que deseas eliminar este evento?"
       );
       if (!confirmed) return;
 

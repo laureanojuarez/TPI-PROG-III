@@ -1,14 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../../services/auth/auth.context";
+import {useContext} from "react";
+import {Link} from "react-router-dom";
+import {AuthContext} from "../../services/auth/auth.context";
+import {useUserData} from "../../hooks/useUserData";
 
 export default function Dashboard() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [entradas, setEntradas] = useState([]);
-
-  const { token } = useContext(AuthContext);
+  const {token} = useContext(AuthContext);
+  const {user, entradas, loading} = useUserData();
 
   if (!token) {
     return (
@@ -21,34 +18,15 @@ export default function Dashboard() {
     );
   }
 
-  useEffect(() => {
-    if (!token) return;
-    const fetchUser = async () => {
-      try {
-        const userRes = await fetch("http://localhost:3000/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const userData = await userRes.json();
-        setUsername(userData.username);
-        setEmail(userData.email);
-        setRole(userData.role);
-        setEntradas(userData.detalle_venta || []);
-        console.log("Entradas del usuario:", userData.detalle_venta);
-      } catch (error) {
-        console.error("Error cargando datos:", error);
-      }
-    };
-
-    fetchUser();
-  }, [token]);
-
-  if (!username) {
+  if (loading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>Cargando...</p>
       </div>
     );
   }
+
+  const {username, email, role} = user;
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center pt-16">

@@ -1,13 +1,13 @@
 import AreaSVG from "../../assets/area.svg?react";
 import "./area.css";
 
-export const Area = ({ setArea }) => {
+export const Area = ({setArea}) => {
   const handleAreaClick = (e) => {
     const group = e.target.closest("g");
     const id = group?.id;
 
     if (id === "bg-vip") {
-      setArea("Sector VIP");
+      setArea("VIP");
     }
 
     if (id === "bg-general") {
