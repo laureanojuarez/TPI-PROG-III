@@ -1,16 +1,16 @@
-import {useState} from "react";
-import {PersonalData} from "./PersonalData";
-import {ChangePassword} from "./ChangePassword";
-import {useUserData} from "../../hooks/useUserData";
+import { useState } from "react";
+import { PersonalData } from "./PersonalData";
+import { ChangePassword } from "./ChangePassword";
+import { useUserData } from "../../hooks/useUserData";
 
 export default function UserProfile() {
   const [option, setOption] = useState("personal");
-  const {user, entradas, loading} = useUserData();
+  const { user, entradas, loading } = useUserData();
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       <div className="w-full h-44 bg-gradient-to-r from-[#7c00e2] to-[#4b00b0] flex items-end">
-        <div className="max-w-5xl w-full mx-auto px-6 pb-6 flex items-end gap-4">
+        <div className="max-w-5xl w-full mx-auto px-6 pb-6 flex flex-wrap items-end gap-4">
           <div className="text-white">
             <h2 className="text-2xl font-bold">{user?.name ?? "Usuario"}</h2>
             <p className="text-sm opacity-90">
@@ -20,12 +20,12 @@ export default function UserProfile() {
         </div>
       </div>
 
-      <div className="max-w-5xl w-full mx-auto px-6 py-8 flex gap-6">
+      <div className="max-w-5xl w-full mx-auto px-6 py-8 flex gap-2 md:gap-4 flex-wrap justify-center">
         <aside className="w-64 bg-white border rounded-lg shadow-sm">
           <div className="divide-y">
             <button
               onClick={() => setOption("personal")}
-              className={`w-full text-left px-6 py-4 ${
+              className={`w-full text-left px-6 py-4  rounded-t-lg ${
                 option === "personal"
                   ? "bg-[#f5f0ff] font-semibold text-[#4b00b0]"
                   : "hover:bg-gray-50"
