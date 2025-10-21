@@ -1,73 +1,124 @@
 import logoMain from "/header-img/logoMain.png";
-import { Link, useNavigate } from "react-router-dom";
-import { Menu } from "lucide-react";
-import { useState } from "react";
+import {Link} from "react-router-dom";
+import {Menu, X} from "lucide-react";
+import {useState, useContext} from "react";
+import {AuthContext} from "../../services/auth/auth.context";
 
 export const Header = () => {
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const {token, handleUserLogout} = useContext(AuthContext);
   const [open, setOpen] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
-
-  const handleMenuToggle = () => {
-    setOpen(!open);
-  };
+  const handleMenuToggle = () => setOpen((prev) => !prev);
+  const handleCloseMenu = () => setOpen(false);
 
   return (
-    <header className="header fixed w-full bg-[#000] backdrop-blur-sm z-10">
-      <nav className="flex flex-col items-center justify-between w-full px-6 py-4">
-        <div className="flex items-center justify-between w-full">
-          <Link to={"/"} className="cursor-pointer">
-            <img src={logoMain} alt="Logo" className="h-12 w-auto" />
-          </Link>
-
-          <Menu
-            color="white"
-            cursor="pointer"
-            onClick={handleMenuToggle}
-            className="md:hidden"
-          />
-
-          <ul className="hidden cursor-pointer items-center gap-16 text-white md:flex">
-            <Link to={"/soporte"} className="nav-item text-[16px]">
-              Soporte
-            </Link>
-
+    <>
+      <header className="fixed w-full bg-black/90 backdrop-blur-sm z-10 py-3 flex items-center justify-between px-6 shadow">
+        <Link to="/" className="cursor-pointer flex items-center gap-2">
+          <img src={logoMain} alt="Logo" className="h-12 w-auto" />
+        </Link>
+        <nav className="flex items-center">
+          {/* Desktop menu */}
+          <ul className="hidden md:flex items-center gap-10 text-white font-medium">
+            <li>
+              <Link to="/soporte" className="hover:text-indigo-400 transition">
+                Soporte
+              </Link>
+            </li>
             {token ? (
               <>
-                <Link to={"/perfil"} className="nav-item">
-                  <li className="nav-item text-[16px]">Mis entradas</li>
-                </Link>
-                <li
-                  onClick={handleLogout}
-                  className="nav-item  text-[16px]"
-                  style={{ cursor: "pointer" }}
-                >
-                  Cerrar Sesión
+                <li>
+                  <Link
+                    to="/dashboard"
+                    className="hover:text-indigo-400 transition"
+                  >
+                    Mis entradas
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={handleUserLogout}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
+                  >
+                    Cerrar Sesión
+                  </button>
                 </li>
               </>
             ) : (
-              <Link to={"/login"} className="nav-item text-[16px]">
-                Iniciar Sesión / Registrarme
-              </Link>
+              <li>
+                <Link
+                  to="/login"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded transition"
+                >
+                  Iniciar Sesión / Registrarme
+                </Link>
+              </li>
             )}
           </ul>
-        </div>
-      </nav>
-      <nav
-        className={`w-full bg-black overflow-hidden transition-all duration-300 ease-out text-white ${
-          open ? "max-h-24" : "max-h-0"
-        } md:hidden`}
-        style={{ height: open ? "6rem" : "0" }}
-      >
-        {/* Contenido del menú */}
-        <h1>HOLA</h1>
-      </nav>
+          {/* Mobile menu button */}
+          <button
+            className="md:hidden ml-4 text-white"
+            onClick={handleMenuToggle}
+            aria-label="Abrir menú"
+          >
+            {open ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </nav>
+        {/* Mobile menu */}
+        <nav
+          className={`absolute top-full left-0 w-full bg-black/95 text-white transition-all duration-300 ease-in-out overflow-hidden md:hidden shadow-lg ${
+            open ? "max-h-60 py-4" : "max-h-0 py-0"
+          }`}
+        >
+          <ul className="flex flex-col items-center gap-4">
+            <li>
+              <Link
+                to="/soporte"
+                onClick={handleCloseMenu}
+                className="hover:text-indigo-400 transition"
+              >
+                Soporte
+              </Link>
+            </li>
+            {token ? (
+              <>
+                <li>
+                  <Link
+                    to="/dashboard"
+                    onClick={handleCloseMenu}
+                    className="hover:text-indigo-400 transition"
+                  >
+                    Mis entradas
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={() => {
+                      handleUserLogout();
+                      handleCloseMenu();
+                    }}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
+                  >
+                    Cerrar Sesión
+                  </button>
+                </li>
+              </>
+            ) : (
+              <li>
+                <Link
+                  to="/login"
+                  onClick={handleCloseMenu}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded transition"
+                >
+                  Iniciar Sesión / Registrarme
+                </Link>
+              </li>
+            )}
+          </ul>
+        </nav>
+      </header>
+      <div className="h-20" /> {/* Espaciador para el header fijo */}
       <hr className="w-full h-px border-0 bg-gradient-to-r from-transparent via-white/20 to-transparent my-3" />
-    </header>
+    </>
   );
 };

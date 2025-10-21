@@ -18,13 +18,13 @@ export const Search = ({ onSearch }) => {
     }
   };
   return (
-    <div className="w-full pb-8 pt-30 flex flex-col items-center bg-[#000]">
+    <div className="w-full pb-8 pt-10 flex flex-col items-center bg-[#000]">
       <input
         type="text"
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleSearch}
         placeholder="Busca por evento o artista!"
-        className="w-full max-w-md border bg-[white] border-black p-2 rounded-lg transition-colors shadow-xl focus:outline-none focus:border-[#7c00e2] focus:ring-2 focus:ring-[#7c00e2] focus:bg-[#f3f4f6]"
+        className="w-full max-w-md border bg-[white] border-black p-2 rounded-lg transition-colors shadow-xl focus:outline-none focus:border-[#7c00e2] focus:ring-2 focus:ring-[#7c00e2] focus:bg-[#f3f4f6] py-2"
       />
     </div>
   );

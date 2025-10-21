@@ -1,22 +1,33 @@
 import express from "express";
-import { sequelize } from "./db.js";
-import { PORT } from "./config.js";
+import {sequelize} from "./db.js";
+import {PORT} from "./config.js";
 import cors from "cors";
 
 import "./models/Evento.js";
 import "./models/User.js";
-import "./models/Pago.js";
 import "./models/DetalleVenta.js";
-import authRoutes from "./routes/auth.routes.js";
+import {User} from "./models/User.js";
+import {DetalleVenta} from "./models/DetalleVenta.js";
+import {Evento} from "./models/Evento.js";
 
+User.hasMany(DetalleVenta, {foreignKey: "id_usuario"});
+DetalleVenta.belongsTo(User, {foreignKey: "id_usuario"});
+
+Evento.hasMany(DetalleVenta, {foreignKey: "id_evento"});
+DetalleVenta.belongsTo(Evento, {foreignKey: "id_evento"});
+
+import authRoutes from "./routes/auth.routes.js";
 import searchRoutes from "./routes/search.routes.js";
+import eventRoutes from "./routes/event.routes.js";
 
 const app = express();
 app.use(cors());
 
 app.use(express.json());
 app.use("/auth", authRoutes);
+app.use("/event", eventRoutes);
 app.use("/search", searchRoutes);
+
 try {
   await sequelize.sync();
   app.listen(PORT, () => console.log("Server listening on port", PORT));

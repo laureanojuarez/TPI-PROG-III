@@ -1,7 +1,7 @@
 export default function Soporte() {
   return (
     <>
-      <div className="bg-[url('https://billboard.ar/wp-content/uploads/2025/03/6769d56f16bec8fc4c4c3782_arb_dia1__mazza.ph-01164-1-scaled.jpeg')] w-full h-[800px] flex items-center justify-center gap-20">
+      <div className="bg-[url('https://billboard.ar/wp-content/uploads/2025/03/6769d56f16bec8fc4c4c3782_arb_dia1__mazza.ph-01164-1-scaled.jpeg')] w-full  flex flex-col md:flex-row p-12 items-center justify-center gap-20">
         <div className="max-w-md w-full h-[500px] p-6 bg-white/10 border border-white/20 rounded-xl shadow-lg backdrop-blur-md text-white flex flex-col justify-between items-center gap-5">
           <h2 className="font-bold text-2xl w-full">
             ¿Tuviste algún inconveniente? ¡Contactanos!

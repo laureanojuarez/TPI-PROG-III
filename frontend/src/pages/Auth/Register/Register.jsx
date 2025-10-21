@@ -92,7 +92,7 @@ export default function Register() {
       });
   };
   return (
-    <main className="min-h-screen text-white pt-10 flex flex-col items-center justify-center">
+    <main className="min-h-screen text-white flex flex-col items-center justify-center">
       <h1 className="text-2xl font-bold">Registrate!</h1>
       <form
         onSubmit={handleSubmit}
