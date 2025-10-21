@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { PersonalData } from "./PersonalData";
-import { ChangePassword } from "./ChangePassword";
+import { PersonalData } from "../../components/userProfile/PersonalData";
+import { ChangePassword } from "../../components/userProfile/ChangePassword";
 import { useUserData } from "../../hooks/useUserData";
 
 export default function UserProfile() {

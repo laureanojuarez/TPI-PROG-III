@@ -1,6 +1,6 @@
 import { useUsersAdmin } from "../../hooks/useUsersAdmin";
 
-export const SuperAdmin = () => {
+export default function SuperAdmin() {
   const { users, refetch } = useUsersAdmin();
 
   const handleRemoveAdmin = async (id) => {
@@ -54,4 +54,4 @@ export const SuperAdmin = () => {
       </ul>
     </div>
   );
-};
+}
