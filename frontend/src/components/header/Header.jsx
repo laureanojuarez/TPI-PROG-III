@@ -1,11 +1,11 @@
 import logoMain from "/header-img/logoMain.png";
-import {Link} from "react-router-dom";
-import {Menu, X} from "lucide-react";
-import {useState, useContext} from "react";
-import {AuthContext} from "../../services/auth/auth.context";
+import { Link } from "react-router-dom";
+import { Menu, X } from "lucide-react";
+import { useState, useContext } from "react";
+import { AuthContext } from "../../services/auth/auth.context";
 
 export const Header = () => {
-  const {token, handleUserLogout} = useContext(AuthContext);
+  const { token, handleUserLogout } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
 
   const handleMenuToggle = () => setOpen((prev) => !prev);
@@ -34,6 +34,9 @@ export const Header = () => {
                   >
                     Mis entradas
                   </Link>
+                </li>
+                <li>
+                  <Link to={"/perfil"}>Mi cuenta</Link>
                 </li>
                 <li>
                   <button

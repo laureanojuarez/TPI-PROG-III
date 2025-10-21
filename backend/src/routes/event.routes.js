@@ -1,4 +1,4 @@
-import {Router} from "express";
+import { Router } from "express";
 import {
   comprarEntrada,
   deleteEvent,
@@ -7,7 +7,7 @@ import {
   registerEvent,
   updateEvent,
 } from "../controllers/event.controller.js";
-import {verifyToken} from "../controllers/verify.controller.js";
+import { verifyToken } from "../controllers/verify.controller.js";
 
 const router = Router();
 

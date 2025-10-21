@@ -1,10 +1,10 @@
-import {useEffect} from "react";
-import {Outlet, useLocation} from "react-router-dom";
-import {Header} from "../header/Header";
-import {Footer} from "../Footer/Footer";
+import { useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import { Header } from "../header/Header";
+import { Footer } from "../Footer/Footer";
 
 export default function Layout() {
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);

@@ -1,6 +1,6 @@
-import {useContext, useEffect, useState} from "react";
-import {Link} from "react-router-dom";
-import {AuthContext} from "../../services/auth/auth.context";
+import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../../services/auth/auth.context";
 
 export default function Dashboard() {
   const [username, setUsername] = useState("");
@@ -8,7 +8,7 @@ export default function Dashboard() {
   const [role, setRole] = useState("");
   const [entradas, setEntradas] = useState([]);
 
-  const {token} = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
 
   if (!token) {
     return (
@@ -26,7 +26,7 @@ export default function Dashboard() {
     const fetchUser = async () => {
       try {
         const userRes = await fetch("http://localhost:3000/auth/me", {
-          headers: {Authorization: `Bearer ${token}`},
+          headers: { Authorization: `Bearer ${token}` },
         });
         const userData = await userRes.json();
         setUsername(userData.username);

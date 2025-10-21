@@ -1,4 +1,4 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Auth/Login/Login";
@@ -11,6 +11,7 @@ import NotFoundPage from "./routes/NotFound";
 import Admin from "./pages/Dashboard/Admin";
 import Checkout from "./pages/Checkout/Checkout";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import { UserProfile } from "./components/userProfile/userProfile";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="admin" element={<Admin />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
+          <Route path="/perfil" element={<UserProfile />} />
         </Route>
       </Routes>
     </BrowserRouter>
