@@ -11,7 +11,7 @@ import NotFoundPage from "./routes/NotFound";
 import Admin from "./pages/Dashboard/Admin";
 import Checkout from "./pages/Checkout/Checkout";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import { UserProfile } from "./components/userProfile/userProfile";
+import UserProfile from "./components/userProfile/UserProfile";
 import { SuperAdmin } from "./pages/Dashboard/SuperAdmin";
 
 function App() {
@@ -29,6 +29,7 @@ function App() {
           <Route element={<Protected />}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="admin" element={<Admin />} />
+            <Route path="perfil" element={<UserProfile />} />
             <Route path="/superadmin" element={<SuperAdmin />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />

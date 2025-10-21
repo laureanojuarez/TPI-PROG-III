@@ -1,9 +1,8 @@
 import logoMain from "/header-img/logoMain.png";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../../services/auth/auth.context";
-import { useEffect } from "react";
 
 export const Header = () => {
   const { token, handleUserLogout } = useContext(AuthContext);
@@ -11,17 +10,6 @@ export const Header = () => {
 
   const handleMenuToggle = () => setOpen((prev) => !prev);
   const handleCloseMenu = () => setOpen(false);
-
-  useEffect(() => {
-    const checkLogin = () => {
-      setInterval(() => {
-        {
-          token ? "" : handleUserLogout();
-        }
-      }, 5000);
-    };
-    checkLogin();
-  }, []);
 
   return (
     <>

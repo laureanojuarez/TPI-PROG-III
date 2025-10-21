@@ -1,15 +1,11 @@
-import { useContext, useEffect, useState } from "react";
-import { data, Link, Navigate } from "react-router-dom";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthContext } from "../../services/auth/auth.context";
+import { useUserData } from "../../hooks/useUserData";
 
 export default function Dashboard() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [entradas, setEntradas] = useState([]);
-  const [userData, setUserData] = useState(null);
-
   const { token } = useContext(AuthContext);
+  const { user, entradas, loading } = useUserData();
 
   if (!token) {
     return (
@@ -22,35 +18,15 @@ export default function Dashboard() {
     );
   }
 
-  useEffect(() => {
-    if (!token) return;
-    const fetchUser = async () => {
-      try {
-        const userRes = await fetch("http://localhost:3000/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const userData = await userRes.json();
-        setUsername(userData.username);
-        setEmail(userData.email);
-        setRole(userData.role);
-        setEntradas(userData.detalle_venta || []);
-        setData(userData);
-        console.log("Entradas del usuario:", userData.detalle_venta);
-      } catch (error) {
-        console.error("Error cargando datos:", error);
-      }
-    };
-
-    fetchUser();
-  }, [token]);
-
-  if (!username) {
+  if (loading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>Cargando...</p>
       </div>
     );
   }
+
+  const { username, email, role } = user;
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center pt-16">
@@ -72,8 +48,8 @@ export default function Dashboard() {
           )}
           {role === "superadmin" && (
             <Link
+              to="/superadmin"
               className="md:w-auto w-full py-2 px-6  bg-blue-600 text-white rounded hover:bg-blue-700 transition text-center"
-              onClick={Navigate("/superadmin", { state: { data: data } })}
             >
               Ir a Super Admin
             </Link>

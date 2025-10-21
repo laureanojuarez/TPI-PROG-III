@@ -1,40 +1,20 @@
-import { useState, useContext, useEffect } from "react";
-import { AuthContext } from "../../services/auth/auth.context";
+import { useState } from "react";
 import { PersonalData } from "./PersonalData";
 import { ChangePassword } from "./ChangePassword";
+import { useUserData } from "../../hooks/useUserData";
 
-export const UserProfile = () => {
+export default function UserProfile() {
   const [option, setOption] = useState("personal");
-  const [data, setData] = useState(null);
-  const [entradas, setEntradas] = useState([]);
-  const { token } = useContext(AuthContext);
-
-  useEffect(() => {
-    if (!token) return;
-    const fetchUser = async () => {
-      try {
-        const userRes = await fetch("http://localhost:3000/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const userData = await userRes.json();
-        setData(userData);
-        setEntradas(userData.detalle_venta || []);
-      } catch (error) {
-        console.error("Error cargando datos:", error);
-      }
-    };
-
-    fetchUser();
-  }, [token]);
+  const { user, entradas, loading } = useUserData();
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       <div className="w-full h-44 bg-gradient-to-r from-[#7c00e2] to-[#4b00b0] flex items-end">
         <div className="max-w-5xl w-full mx-auto px-6 pb-6 flex items-end gap-4">
           <div className="text-white">
-            <h2 className="text-2xl font-bold">{data?.name ?? "Usuario"}</h2>
+            <h2 className="text-2xl font-bold">{user?.name ?? "Usuario"}</h2>
             <p className="text-sm opacity-90">
-              {data?.email ?? "usuario@ejemplo.com"}
+              {user?.email ?? "usuario@ejemplo.com"}
             </p>
           </div>
         </div>
@@ -80,29 +60,33 @@ export const UserProfile = () => {
           <div className="bg-white rounded-lg shadow p-6 min-h-[300px]">
             {option === "personal" && (
               <PersonalData
-                data={data}
+                data={user}
                 onSave={(payload) => console.log("save", payload)}
               />
             )}
             {option === "security" && (
               <ChangePassword
-                data={data}
+                data={user}
                 onChangePassword={(p) => console.log("change password", p)}
               />
             )}
             {option === "events" && (
               <div>
                 <h3 className="text-lg font-semibold mb-4">Mis eventos</h3>
-                <p className="text-gray-600">
-                  {entradas.map(() =>
-                    entradas.map((entrada) => (
+                {loading ? (
+                  <p className="text-gray-500">Cargando entradas...</p>
+                ) : entradas.length === 0 ? (
+                  <p className="text-gray-500">No tienes entradas.</p>
+                ) : (
+                  <ul>
+                    {entradas.map((entrada) => (
                       <li
                         key={entrada.id}
-                        className="border rounded p-3 bg-gray-50 flex "
+                        className="border rounded p-3 bg-gray-50 flex mb-2"
                       >
                         <img
                           src={entrada.evento.poster}
-                          alt="dsad"
+                          alt={entrada.evento.name}
                           className="h-32"
                         />
                         <div className="flex flex-col ml-4">
@@ -131,9 +115,9 @@ export const UserProfile = () => {
                           </span>
                         </div>
                       </li>
-                    ))
-                  )}
-                </p>
+                    ))}
+                  </ul>
+                )}
               </div>
             )}
           </div>
@@ -141,4 +125,4 @@ export const UserProfile = () => {
       </div>
     </div>
   );
-};
+}

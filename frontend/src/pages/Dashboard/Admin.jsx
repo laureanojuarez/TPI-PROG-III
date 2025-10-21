@@ -14,6 +14,7 @@ export default function Admin() {
     date: "",
     artist: "",
     poster: "",
+    posterHorizontal: "",
   });
 
   const handleChange = (e) => {
@@ -65,6 +66,7 @@ export default function Admin() {
         date: "",
         artist: "",
         poster: "",
+        posterHorizontal: "",
       });
       refetch();
     } catch (error) {
@@ -75,7 +77,7 @@ export default function Admin() {
   const handleDelete = async (id) => {
     try {
       const confirmed = window.confirm(
-        "¿Estás seguro de que deseas eliminar este evento?"
+        "¿Estas seguro de que deseas eliminar este evento?"
       );
       if (!confirmed) return;
 
@@ -102,6 +104,7 @@ export default function Admin() {
       date: event.date.slice(0, 10),
       artist: event.artist,
       poster: event.poster,
+      posterHorizontal: event.posterHorizontal,
     });
   };
 
@@ -205,6 +208,16 @@ export default function Admin() {
                 id="poster"
                 placeholder="https://ejemplo.com/poster.jpg"
                 value={eventData.poster}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                required
+              />
+              <input
+                type="text"
+                name="posterHorizontal"
+                id="posterHorizontal"
+                placeholder="https://ejemplo.com/poster-horizontal.jpg"
+                value={eventData.posterHorizontal}
                 onChange={handleChange}
                 className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 required

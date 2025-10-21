@@ -9,7 +9,7 @@ export const EventCard = ({ event: { id, name, poster, location, date } }) => {
       <img src={poster} alt={name} className=" md:h-[400px] md:object-cover" />
       <h2 className="text-2xl">{name}</h2>
       <p className="text-lg">📍 {location}</p>
-      <p className="text-lg">📅 {date}</p>
+      <p className="text-lg">📅 {new Date(date).toLocaleDateString()}</p>
     </Link>
   );
 };
