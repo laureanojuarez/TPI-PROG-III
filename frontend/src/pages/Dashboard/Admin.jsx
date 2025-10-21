@@ -1,10 +1,10 @@
-import {useContext, useState} from "react";
-import {AuthContext} from "../../services/auth/auth.context";
-import {useEvents} from "../../hooks/useEvents";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../services/auth/auth.context";
+import { useEvents } from "../../hooks/useEvents";
 
 export default function Admin() {
-  const {token} = useContext(AuthContext);
-  const {events, loading, refetch} = useEvents();
+  const { token } = useContext(AuthContext);
+  const { events, loading, refetch } = useEvents();
   const [editingEvent, setEditingEvent] = useState(null);
 
   const [eventData, setEventData] = useState({
@@ -17,8 +17,8 @@ export default function Admin() {
   });
 
   const handleChange = (e) => {
-    const {name, value} = e.target;
-    setEventData({...eventData, [name]: value});
+    const { name, value } = e.target;
+    setEventData({ ...eventData, [name]: value });
   };
 
   const handleCreate = async (e) => {

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useState, useContext } from "react";
 import { AuthContext } from "../../services/auth/auth.context";
+import { useEffect } from "react";
 
 export const Header = () => {
   const { token, handleUserLogout } = useContext(AuthContext);
@@ -11,6 +12,17 @@ export const Header = () => {
   const handleMenuToggle = () => setOpen((prev) => !prev);
   const handleCloseMenu = () => setOpen(false);
 
+  useEffect(() => {
+    const checkLogin = () => {
+      setInterval(() => {
+        {
+          token ? "" : handleUserLogout();
+        }
+      }, 5000);
+    };
+    checkLogin();
+  }, []);
+
   return (
     <>
       <header className="fixed w-full bg-black/70 backdrop-blur-sm z-10 py-3 flex items-center justify-between px-6 shadow">
@@ -18,7 +30,6 @@ export const Header = () => {
           <img src={logoMain} alt="Logo" className="h-12 w-auto" />
         </Link>
         <nav className="flex items-center">
-          {/* Desktop menu */}
           <ul className="hidden md:flex items-center gap-10 text-white font-medium">
             <li>
               <Link to="/soporte" className="hover:text-indigo-400 transition">
@@ -58,7 +69,7 @@ export const Header = () => {
               </li>
             )}
           </ul>
-          {/* Mobile menu button */}
+
           <button
             className="md:hidden ml-4 text-white"
             onClick={handleMenuToggle}
@@ -67,7 +78,7 @@ export const Header = () => {
             {open ? <X size={28} /> : <Menu size={28} />}
           </button>
         </nav>
-        {/* Mobile menu */}
+
         <nav
           className={`absolute top-full left-0 w-full bg-black/95 text-white transition-all duration-300 ease-in-out overflow-hidden md:hidden shadow-lg ${
             open ? "max-h-60 py-4" : "max-h-0 py-0"

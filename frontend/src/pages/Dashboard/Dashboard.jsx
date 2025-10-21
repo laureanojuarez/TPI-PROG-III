@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { data, Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../../services/auth/auth.context";
 
 export default function Dashboard() {
@@ -7,6 +7,7 @@ export default function Dashboard() {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [entradas, setEntradas] = useState([]);
+  const [userData, setUserData] = useState(null);
 
   const { token } = useContext(AuthContext);
 
@@ -33,6 +34,7 @@ export default function Dashboard() {
         setEmail(userData.email);
         setRole(userData.role);
         setEntradas(userData.detalle_venta || []);
+        setData(userData);
         console.log("Entradas del usuario:", userData.detalle_venta);
       } catch (error) {
         console.error("Error cargando datos:", error);
@@ -66,6 +68,14 @@ export default function Dashboard() {
               className="md:w-auto w-full py-2 px-6  bg-blue-600 text-white rounded hover:bg-blue-700 transition text-center"
             >
               Ir a Admin
+            </Link>
+          )}
+          {role === "superadmin" && (
+            <Link
+              className="md:w-auto w-full py-2 px-6  bg-blue-600 text-white rounded hover:bg-blue-700 transition text-center"
+              onClick={Navigate("/superadmin", { state: { data: data } })}
+            >
+              Ir a Super Admin
             </Link>
           )}
         </div>
