@@ -1,13 +1,13 @@
-import {useContext, useState} from "react";
-import {PersonalData} from "../../components/userProfile/PersonalData";
-import {ChangePassword} from "../../components/userProfile/ChangePassword";
-import {useUserData} from "../../hooks/useUserData";
-import {AuthContext} from "../../services/auth/auth.context";
+import { useContext, useState } from "react";
+import { PersonalData } from "../../components/userProfile/PersonalData";
+import { ChangePassword } from "../../components/userProfile/ChangePassword";
+import { useUserData } from "../../hooks/useUserData";
+import { AuthContext } from "../../services/auth/auth.context";
 
 export default function UserProfile() {
   const [option, setOption] = useState("personal");
-  const {user, entradas, loading} = useUserData();
-  const {token} = useContext(AuthContext);
+  const { user, entradas, loading } = useUserData();
+  const { token } = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState("");
 
   const updateProfile = async (userId, payload, token) => {
@@ -19,6 +19,8 @@ export default function UserProfile() {
       },
       body: JSON.stringify(payload),
     });
+    const data = res.json();
+    console.log("Profile updated:", data);
     if (!res.ok) {
       const error = await res.json();
       throw new Error(error.message || "Error al actualizar el perfil");
