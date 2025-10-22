@@ -1,14 +1,14 @@
-import {useContext, useState} from "react";
-import {useParams, Link, useNavigate} from "react-router-dom";
-import {Area} from "../../components/Area/Area";
-import {useEventDetail} from "../../hooks/useEventDetail";
-import {AuthContext} from "../../services/auth/auth.context";
+import { useContext, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { Area } from "../../components/Area/Area";
+import { useEventDetail } from "../../hooks/useEventDetail";
+import { AuthContext } from "../../services/auth/auth.context";
 
 export default function Checkout() {
-  const {id} = useParams();
-  const {event, loading} = useEventDetail(id);
+  const { id } = useParams();
+  const { event, loading } = useEventDetail(id);
   const [area, setArea] = useState("");
-  const {token} = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
   const navigate = useNavigate();
 
   if (loading) {
@@ -31,6 +31,11 @@ export default function Checkout() {
   }
 
   const handleCheckout = async () => {
+    const confirm = window.confirm(
+      `¿Confirmas la compra de una entrada para el sector "${area}" del evento "${event.name}"?`
+    );
+    if (!confirm) return;
+
     try {
       const res = await fetch("http://localhost:3000/event/comprar", {
         method: "POST",
