@@ -1,11 +1,40 @@
-import { useState } from "react";
-import { PersonalData } from "./PersonalData";
-import { ChangePassword } from "./ChangePassword";
+import { useContext, useState } from "react";
+import { PersonalData } from "../../components/userProfile/PersonalData";
+import { ChangePassword } from "../../components/userProfile/ChangePassword";
 import { useUserData } from "../../hooks/useUserData";
+import { AuthContext } from "../../services/auth/auth.context";
 
 export default function UserProfile() {
   const [option, setOption] = useState("personal");
   const { user, entradas, loading } = useUserData();
+  const { token } = useContext(AuthContext);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const updateProfile = async (userId, payload, token) => {
+    const res = await fetch(`http://localhost:3000/auth/user/${userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.message || "Error al actualizar el perfil");
+    }
+    return await res.json();
+  };
+
+  const handleSave = async (payload) => {
+    setErrorMsg("");
+    try {
+      await updateProfile(user.id, payload, token);
+      alert("Perfil actualizado correctamente");
+    } catch (error) {
+      setErrorMsg(error.message || "Error al actualizar el perfil");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
@@ -58,11 +87,11 @@ export default function UserProfile() {
 
         <main className="flex-1">
           <div className="bg-white rounded-lg shadow p-6 min-h-[300px]">
+            {errorMsg && (
+              <div className="mb-4 text-red-600 font-semibold">{errorMsg}</div>
+            )}
             {option === "personal" && (
-              <PersonalData
-                data={user}
-                onSave={(payload) => console.log("save", payload)}
-              />
+              <PersonalData data={user} onSave={handleSave} />
             )}
             {option === "security" && (
               <ChangePassword

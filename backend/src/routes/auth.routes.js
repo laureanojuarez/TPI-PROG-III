@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  changeProfile,
   getMe,
   getUserById,
   getUsers,
@@ -18,5 +19,7 @@ router.get("/users/:id", verifyToken, getUserById);
 router.delete("/user/:id", verifyToken, removeAdminRole);
 router.get("/me", verifyToken, getMe);
 router.get("/me/entradas", verifyToken, getMe);
+
+router.put("/user/:id", verifyToken, changeProfile); // Actualizar perfil de usuario
 
 export default router;

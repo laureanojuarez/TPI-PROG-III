@@ -12,7 +12,6 @@ export function useUserData() {
     const fetchUser = async () => {
       setLoading(true);
       try {
-        console.log("TOKEN", token);
         const res = await fetch("http://localhost:3000/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });

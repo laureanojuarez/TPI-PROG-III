@@ -1,5 +1,5 @@
-import {DataTypes} from "sequelize";
-import {sequelize} from "../db.js";
+import { DataTypes } from "sequelize";
+import { sequelize } from "../db.js";
 
 export const User = sequelize.define(
   "user",
@@ -22,15 +22,11 @@ export const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    age: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
     role: {
       type: DataTypes.ENUM("user", "admin", "superadmin"),
       allowNull: false,
       defaultValue: "user",
     },
   },
-  {timestamps: false}
+  { timestamps: false }
 );
