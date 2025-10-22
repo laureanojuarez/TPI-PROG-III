@@ -134,6 +134,28 @@ export const changeProfile = async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
+    const existUsername = await User.findOne({
+      where: {
+        username: username,
+      },
+    });
+
+    if (existUsername && existUsername.id !== user.id) {
+      return res
+        .status(400)
+        .json({ message: "El nombre de usuario ya está en uso" });
+    }
+
+    const existEmail = await User.findOne({
+      where: {
+        email: email,
+      },
+    });
+
+    if (existEmail && existEmail.id !== user.id) {
+      return res.status(400).json({ message: "El email ya está en uso" });
+    }
+
     if (username !== undefined) {
       user.username = username;
     }

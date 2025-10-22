@@ -8,8 +8,9 @@ export default function UserProfile() {
   const [option, setOption] = useState("personal");
   const { user, entradas, loading } = useUserData();
   const { token } = useContext(AuthContext);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const updateProfile = async () => {
+  const updateProfile = async (userId, payload, token) => {
     const res = await fetch(`http://localhost:3000/auth/user/${userId}`, {
       method: "PUT",
       headers: {
@@ -26,11 +27,12 @@ export default function UserProfile() {
   };
 
   const handleSave = async (payload) => {
+    setErrorMsg("");
     try {
       await updateProfile(user.id, payload, token);
       alert("Perfil actualizado correctamente");
     } catch (error) {
-      alert(error.message);
+      setErrorMsg(error.message || "Error al actualizar el perfil");
     }
   };
 
@@ -85,6 +87,9 @@ export default function UserProfile() {
 
         <main className="flex-1">
           <div className="bg-white rounded-lg shadow p-6 min-h-[300px]">
+            {errorMsg && (
+              <div className="mb-4 text-red-600 font-semibold">{errorMsg}</div>
+            )}
             {option === "personal" && (
               <PersonalData data={user} onSave={handleSave} />
             )}
