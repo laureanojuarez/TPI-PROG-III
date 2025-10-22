@@ -1,12 +1,12 @@
-import {User} from "../models/User.js";
+import { User } from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import {validateLoginUser} from "../helpers/validations.js";
-import {DetalleVenta} from "../models/DetalleVenta.js";
-import {Evento} from "../models/Evento.js";
+import { validateLoginUser } from "../helpers/validations.js";
+import { DetalleVenta } from "../models/DetalleVenta.js";
+import { Evento } from "../models/Evento.js";
 
 export const registerUser = async (req, res) => {
-  const {username, email, password, age, role} = req.body;
+  const { username, email, password, age, role } = req.body;
 
   const user = await User.findOne({
     where: {
@@ -15,7 +15,7 @@ export const registerUser = async (req, res) => {
   });
 
   if (user) {
-    return res.status(400).json({message: "El usuario ya existe"});
+    return res.status(400).json({ message: "El usuario ya existe" });
   }
 
   const saltRounds = 10;
@@ -37,7 +37,7 @@ export const registerUser = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   const users = await User.findAll({
-    attributes: {exclude: ["password"]},
+    attributes: { exclude: ["password"] },
   });
   res.json(users);
 };
@@ -46,66 +46,82 @@ export const loginUser = async (req, res) => {
   const result = validateLoginUser(req.body);
 
   if (result.error) {
-    return res.status(400).send({message: result.message});
+    return res.status(400).send({ message: result.message });
   }
 
-  const {email, password} = req.body;
+  const { email, password } = req.body;
 
   const user = await User.findOne({
-    where: {email},
+    where: { email },
   });
 
   if (!user) {
-    return res.status(404).json({message: "Usuario no encontrado"});
+    return res.status(404).json({ message: "Usuario no encontrado" });
   }
 
   const comparison = await bcrypt.compare(password, user.password);
 
   if (!comparison) {
-    return res.status(401).json({message: "Email y/o contraseña incorrecta"});
+    return res.status(401).json({ message: "Email y/o contraseña incorrecta" });
   }
 
   const secretKey = "lucasoelschlager";
   const token = jwt.sign(
-    {id: user.id, email: user.email, role: user.role},
+    { id: user.id, email: user.email, role: user.role },
     secretKey,
-    {expiresIn: "1h"}
+    { expiresIn: "1h" }
   );
 
   return res.json(token);
 };
 
 export const getUserById = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   const user = await User.findByPk(id, {
-    attributes: {exclude: ["password"]},
+    attributes: { exclude: ["password"] },
   });
   if (!user) {
-    return res.status(404).json({message: "Usuario no encontrado"});
+    return res.status(404).json({ message: "Usuario no encontrado" });
   }
   res.json(user);
 };
 
 export const removeAdminRole = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   const user = await User.findByPk(id);
   try {
     if (!user) {
-      return res.status(404).json({message: "Usuario no encontrado"});
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
     user.role = "user";
     await user.save();
-    res.json({message: "Rol de administrador removido"});
+    res.json({ message: "Rol de administrador removido" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({message: "Error al remover rol de administrador"});
+    res.status(500).json({ message: "Error al remover rol de administrador" });
+  }
+};
+
+export const setAdminRole = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findByPk(id);
+  try {
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    user.role = "admin";
+    await user.save();
+    res.json({ message: "Rol de administrador asignado" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error al asignar rol de administrador" });
   }
 };
 
 export const getMe = async (req, res) => {
   const user = await User.findOne({
-    where: {email: req.email},
-    attributes: {exclude: ["password"]},
+    where: { email: req.email },
+    attributes: { exclude: ["password"] },
     include: [
       {
         model: DetalleVenta,
@@ -119,36 +135,36 @@ export const getMe = async (req, res) => {
     ],
   });
   if (!user) {
-    return res.status(404).json({message: "Usuario no encontrado"});
+    return res.status(404).json({ message: "Usuario no encontrado" });
   }
   res.json(user);
 };
 
 export const changeProfile = async (req, res) => {
-  const {id} = req.params;
-  const {username, email, age} = req.body;
+  const { id } = req.params;
+  const { username, email, password } = req.body;
 
   try {
     const user = await User.findByPk(id);
     if (!user) {
-      return res.status(404).json({message: "Usuario no encontrado"});
+      return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
     if (username !== undefined) {
       if (username.trim() === "") {
         return res
           .status(400)
-          .json({message: "El nombre de usuario no puede estar vacío"});
+          .json({ message: "El nombre de usuario no puede estar vacío" });
       }
 
       if (username !== user.username) {
         const existUsername = await User.findOne({
-          where: {username},
+          where: { username },
         });
         if (existUsername) {
           return res
             .status(400)
-            .json({message: "El nombre de usuario ya está en uso"});
+            .json({ message: "El nombre de usuario ya está en uso" });
         }
         user.username = username;
       }
@@ -156,21 +172,55 @@ export const changeProfile = async (req, res) => {
 
     if (email !== undefined) {
       if (email.trim() === "") {
-        return res.status(400).json({message: "El mail no puede estar vacío"});
+        return res
+          .status(400)
+          .json({ message: "El mail no puede estar vacío" });
       }
       if (email !== user.email) {
-        const existEmail = await User.findOne({where: {email}});
+        const existEmail = await User.findOne({ where: { email } });
         if (existEmail && existEmail.id !== user.id) {
-          return res.status(400).json({message: "El email ya está en uso"});
+          return res.status(400).json({ message: "El email ya está en uso" });
         }
         user.email = email;
       }
     }
 
+    if (password !== undefined) {
+      if (password.trim() === "") {
+        return res
+          .status(400)
+          .json({ message: "La contraseña no puede estar vacía" });
+      }
+      user.password = await bcrypt.hash(password, 10);
+    }
+
     await user.save();
-    res.json({message: "Perfil actualizado"});
+    res.json({ message: "Perfil actualizado" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({message: "Error al actualizar el perfil"});
+    res.status(500).json({ message: "Error al actualizar el perfil" });
+  }
+};
+export const changePassword = async (req, res) => {
+  const { id } = req.params;
+  const { current, newPass } = req.body;
+
+  try {
+    const user = await User.findByPk(id);
+    if (!user)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+
+    const isMatch = await bcrypt.compare(current, user.password);
+    if (!isMatch)
+      return res
+        .status(401)
+        .json({ message: "La contraseña actual es incorrecta" });
+
+    user.password = await bcrypt.hash(newPass, 10);
+    await user.save();
+
+    res.json({ message: "Contraseña actualizada correctamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al cambiar la contraseña" });
   }
 };

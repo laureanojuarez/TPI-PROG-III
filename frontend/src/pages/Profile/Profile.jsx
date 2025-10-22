@@ -38,6 +38,57 @@ export default function UserProfile() {
     }
   };
 
+  const handleChangePassword = async ({ current, newPass }) => {
+    setErrorMsg("");
+    try {
+      const res = await fetch(
+        `http://localhost:3000/auth/user/${user.id}/password`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ current, newPass }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok)
+        throw new Error(data.message || "Error al cambiar la contraseña");
+      alert("Contraseña actualizada correctamente");
+    } catch (error) {
+      setErrorMsg(error.message || "Error al cambiar la contraseña");
+    }
+  };
+
+  const handleSaveProfile = async (payload) => {
+    setErrorMsg("");
+    try {
+      const res = await fetch(`http://localhost:3000/auth/user/${user.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok)
+        throw new Error(data.message || "Error al actualizar el perfil");
+      alert("Perfil actualizado correctamente");
+    } catch (error) {
+      setErrorMsg(error.message || "Error al actualizar el perfil");
+    }
+  };
+
+  if (loading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <span className="text-xl text-gray-600">Cargando perfil...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       <div className="w-full h-44 bg-gradient-to-r from-[#7c00e2] to-[#4b00b0] flex items-end">
@@ -102,7 +153,7 @@ export default function UserProfile() {
             {option === "security" && (
               <ChangePassword
                 data={user}
-                onChangePassword={(p) => console.log("change password", p)}
+                onChangePassword={handleChangePassword}
               />
             )}
             {option === "events" && (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export const ChangePassword = ({ data, onChangePassword }) => {
   const [current, setCurrent] = useState("");
@@ -11,14 +11,11 @@ export const ChangePassword = ({ data, onChangePassword }) => {
       alert("La nueva contraseña no coincide");
       return;
     }
-    // llamar al backend luego
     if (onChangePassword) onChangePassword({ current, newPass });
-    else console.log("change password", { current, newPass });
     setCurrent("");
     setNewPass("");
     setConfirm("");
   };
-
   return (
     <form onSubmit={handleSubmit} className="p-8 flex-1 max-w-md">
       <h3 className="text-xl font-semibold mb-4">Cambiar contraseña</h3>
