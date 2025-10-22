@@ -1,13 +1,13 @@
-import { useContext, useState } from "react";
-import { PersonalData } from "../../components/userProfile/PersonalData";
-import { ChangePassword } from "../../components/userProfile/ChangePassword";
-import { useUserData } from "../../hooks/useUserData";
-import { AuthContext } from "../../services/auth/auth.context";
+import {useContext, useState} from "react";
+import {PersonalData} from "../../components/userProfile/PersonalData";
+import {ChangePassword} from "../../components/userProfile/ChangePassword";
+import {useUserData} from "../../hooks/useUserData";
+import {AuthContext} from "../../services/auth/auth.context";
 
 export default function UserProfile() {
   const [option, setOption] = useState("personal");
-  const { user, entradas, loading } = useUserData();
-  const { token } = useContext(AuthContext);
+  const {user, entradas, loading} = useUserData();
+  const {token} = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState("");
 
   const updateProfile = async (userId, payload, token) => {
@@ -29,7 +29,7 @@ export default function UserProfile() {
   const handleSave = async (payload) => {
     setErrorMsg("");
     try {
-      await updateProfile(user.id, payload, token);
+      await updateProfile(user.id, payload);
       alert("Perfil actualizado correctamente");
     } catch (error) {
       setErrorMsg(error.message || "Error al actualizar el perfil");
@@ -41,9 +41,9 @@ export default function UserProfile() {
       <div className="w-full h-44 bg-gradient-to-r from-[#7c00e2] to-[#4b00b0] flex items-end">
         <div className="max-w-5xl w-full mx-auto px-6 pb-6 flex flex-wrap items-end gap-4">
           <div className="text-white">
-            <h2 className="text-2xl font-bold">{user?.name ?? "Usuario"}</h2>
+            <h2 className="text-2xl font-bold">{user.username ?? "Usuario"}</h2>
             <p className="text-sm opacity-90">
-              {user?.email ?? "usuario@ejemplo.com"}
+              {user.email ?? "usuario@ejemplo.com"}
             </p>
           </div>
         </div>
@@ -87,11 +87,15 @@ export default function UserProfile() {
 
         <main className="flex-1">
           <div className="bg-white rounded-lg shadow p-6 min-h-[300px]">
-            {errorMsg && (
-              <div className="mb-4 text-red-600 font-semibold">{errorMsg}</div>
-            )}
             {option === "personal" && (
-              <PersonalData data={user} onSave={handleSave} />
+              <>
+                {errorMsg && (
+                  <div className="mb-4 text-red-600 font-semibold">
+                    {errorMsg}
+                  </div>
+                )}
+                <PersonalData data={user} onSave={handleSave} />
+              </>
             )}
             {option === "security" && (
               <ChangePassword

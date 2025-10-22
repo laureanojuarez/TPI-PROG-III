@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Auth/Login/Login";
@@ -12,7 +12,7 @@ import Admin from "./pages/Dashboard/Admin";
 import Checkout from "./pages/Checkout/Checkout";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import SuperAdmin from "./pages/Dashboard/SuperAdmin";
-import UserProfile from "./pages/profile/profile";
+import UserProfile from "./pages/Profile/Profile";
 
 function App() {
   return (

@@ -1,11 +1,11 @@
 import logoMain from "/header-img/logoMain.png";
-import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
-import { useState, useContext, useEffect } from "react";
-import { AuthContext } from "../../services/auth/auth.context";
+import {Link} from "react-router-dom";
+import {Menu, X} from "lucide-react";
+import {useState, useContext, useEffect} from "react";
+import {AuthContext} from "../../services/auth/auth.context";
 
 export const Header = () => {
-  const { token, handleUserLogout } = useContext(AuthContext);
+  const {token, handleUserLogout} = useContext(AuthContext);
   const [open, setOpen] = useState(false);
 
   const handleMenuToggle = () => setOpen((prev) => !prev);
@@ -52,7 +52,7 @@ export const Header = () => {
                   to="/login"
                   className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded transition"
                 >
-                  Iniciar Sesión / Registrarme
+                  Iniciar Sesión
                 </Link>
               </li>
             )}

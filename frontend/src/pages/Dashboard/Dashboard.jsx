@@ -1,10 +1,8 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../../services/auth/auth.context";
-import { useUserData } from "../../hooks/useUserData";
+import {Link} from "react-router-dom";
+import {useUserData} from "../../hooks/useUserData";
 
 export default function Dashboard() {
-  const { user, entradas, loading } = useUserData();
+  const {user, entradas, loading} = useUserData();
 
   if (loading || !user) {
     return (
@@ -16,7 +14,7 @@ export default function Dashboard() {
     );
   }
 
-  const { username, email, role } = user;
+  const {username, email, role} = user;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-white flex flex-col items-center pt-16">
