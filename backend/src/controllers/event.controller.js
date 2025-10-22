@@ -13,6 +13,18 @@ export const registerEvent = async (req, res) => {
     posterHorizontal,
   } = req.body;
 
+  if (
+    !name ||
+    !description ||
+    !date ||
+    !location ||
+    !artist ||
+    !poster ||
+    !posterHorizontal
+  ) {
+    return res.status(400).json({ message: "Faltan datos obligatorios" });
+  }
+
   try {
     const newEvent = await Evento.create({
       name,
@@ -77,21 +89,9 @@ export const deleteEvent = async (req, res) => {
 
 export const updateEvent = async (req, res) => {
   const { id } = req.params;
-  const {
-    name,
-    description,
-    date,
-    location,
-    artist,
-    poster,
-    posterHorizontal,
-  } = req.body;
 
   try {
-    const [updated] = await Evento.update(
-      { name, description, date, location, artist, poster, posterHorizontal },
-      { where: { id } }
-    );
+    const [updated] = await Evento.update(req.body, { where: { id } });
 
     if (updated) {
       const updatedEvent = await Evento.findByPk(id);
