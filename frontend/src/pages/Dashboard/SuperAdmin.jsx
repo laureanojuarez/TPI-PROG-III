@@ -1,7 +1,11 @@
+import { useUserData } from "../../hooks/useUserData";
 import { useUsersAdmin } from "../../hooks/useUsersAdmin";
 
 export default function SuperAdmin() {
-  const { users, refetch } = useUsersAdmin();
+  const { users = [], refetch } = useUsersAdmin();
+  const admins = Array.isArray(users)
+    ? users.filter((e) => e.role === "admin")
+    : [];
 
   const handleRemoveAdmin = async (id) => {
     try {
@@ -17,13 +21,26 @@ export default function SuperAdmin() {
       console.error("Error al remover rol de administrador");
     }
   };
+  const handleSetAdmin = async (id) => {
+    try {
+      const res = await fetch(`http://localhost:3000/auth/user/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      refetch();
+    } catch (err) {
+      console.error("Error al asignar rol de administrador");
+    }
+  };
 
   return (
     <div className="min-h-screen w-full bg-gray-100 px-8 py-10">
       <h2 className="text-2xl font-bold text-[#7c00e2] mb-8">
         Gestioná los Administradores
       </h2>
-
       <ul className="max-w-2xl mx-auto grid gap-6">
         {users.map((e) => (
           <li
@@ -42,12 +59,21 @@ export default function SuperAdmin() {
               )}
             </div>
             <div className="flex gap-2">
-              <button
-                className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-700 transition"
-                onClick={() => handleRemoveAdmin(e.id)}
-              >
-                Quitar Admin
-              </button>
+              {e.role == "admin" ? (
+                <button
+                  className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-700 transition"
+                  onClick={() => handleRemoveAdmin(e.id)}
+                >
+                  Quitar Admin
+                </button>
+              ) : (
+                <button
+                  className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-500 transition cursor-pointer"
+                  onClick={() => handleSetAdmin(e.id)}
+                >
+                  Dar admin
+                </button>
+              )}
             </div>
           </li>
         ))}

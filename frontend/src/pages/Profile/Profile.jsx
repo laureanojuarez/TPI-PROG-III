@@ -19,6 +19,8 @@ export default function UserProfile() {
       },
       body: JSON.stringify(payload),
     });
+    const data = res.json();
+    console.log("Profile updated:", data);
     if (!res.ok) {
       const error = await res.json();
       throw new Error(error.message || "Error al actualizar el perfil");
@@ -29,21 +31,72 @@ export default function UserProfile() {
   const handleSave = async (payload) => {
     setErrorMsg("");
     try {
-      await updateProfile(user.id, payload, token);
+      await updateProfile(user.id, payload);
       alert("Perfil actualizado correctamente");
     } catch (error) {
       setErrorMsg(error.message || "Error al actualizar el perfil");
     }
   };
 
+  const handleChangePassword = async ({ current, newPass }) => {
+    setErrorMsg("");
+    try {
+      const res = await fetch(
+        `http://localhost:3000/auth/user/${user.id}/password`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ current, newPass }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok)
+        throw new Error(data.message || "Error al cambiar la contraseña");
+      alert("Contraseña actualizada correctamente");
+    } catch (error) {
+      setErrorMsg(error.message || "Error al cambiar la contraseña");
+    }
+  };
+
+  const handleSaveProfile = async (payload) => {
+    setErrorMsg("");
+    try {
+      const res = await fetch(`http://localhost:3000/auth/user/${user.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok)
+        throw new Error(data.message || "Error al actualizar el perfil");
+      alert("Perfil actualizado correctamente");
+    } catch (error) {
+      setErrorMsg(error.message || "Error al actualizar el perfil");
+    }
+  };
+
+  if (loading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <span className="text-xl text-gray-600">Cargando perfil...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
       <div className="w-full h-44 bg-gradient-to-r from-[#7c00e2] to-[#4b00b0] flex items-end">
         <div className="max-w-5xl w-full mx-auto px-6 pb-6 flex flex-wrap items-end gap-4">
           <div className="text-white">
-            <h2 className="text-2xl font-bold">{user?.name ?? "Usuario"}</h2>
+            <h2 className="text-2xl font-bold">{user.username ?? "Usuario"}</h2>
             <p className="text-sm opacity-90">
-              {user?.email ?? "usuario@ejemplo.com"}
+              {user.email ?? "usuario@ejemplo.com"}
             </p>
           </div>
         </div>
@@ -87,16 +140,20 @@ export default function UserProfile() {
 
         <main className="flex-1">
           <div className="bg-white rounded-lg shadow p-6 min-h-[300px]">
-            {errorMsg && (
-              <div className="mb-4 text-red-600 font-semibold">{errorMsg}</div>
-            )}
             {option === "personal" && (
-              <PersonalData data={user} onSave={handleSave} />
+              <>
+                {errorMsg && (
+                  <div className="mb-4 text-red-600 font-semibold">
+                    {errorMsg}
+                  </div>
+                )}
+                <PersonalData data={user} onSave={handleSave} />
+              </>
             )}
             {option === "security" && (
               <ChangePassword
                 data={user}
-                onChangePassword={(p) => console.log("change password", p)}
+                onChangePassword={handleChangePassword}
               />
             )}
             {option === "events" && (

@@ -28,7 +28,7 @@ export const validateLoginUser = (req) => {
     error: false,
     message: "",
   };
-  const { email, password } = req;
+  const {email, password} = req;
 
   if (!email || !validateEmail(email)) {
     return {
@@ -53,7 +53,7 @@ export const validateRegisterUser = (req) => {
     message: "",
   };
 
-  const { username, email, password, confirmPassword } = req;
+  const {username, email, password, confirmPassword} = req;
 
   if (!username || !validateString(username, 3, 30)) {
     return {
@@ -69,17 +69,17 @@ export const validateRegisterUser = (req) => {
     };
   }
 
-  if (!password || !validatePassword(password, 7, null, true, true)) {
-    return {
-      error: true,
-      message: "Contraseña incorrecta",
-    };
-  }
-
   if (password !== confirmPassword) {
     return {
       error: true,
       message: "Las contraseñas no coinciden",
+    };
+  }
+
+  if (!password || !validatePassword(password, 7, null, true, true)) {
+    return {
+      error: true,
+      message: "Contraseña incorrecta",
     };
   }
 

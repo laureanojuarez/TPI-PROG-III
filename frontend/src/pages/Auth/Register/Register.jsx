@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { validateRegisterUser } from "../auth.services";
+import {useRef, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {validateRegisterUser} from "../auth.services";
 
 export default function Register() {
   const emailRef = useRef(null);
@@ -24,22 +24,22 @@ export default function Register() {
 
   const handleUserChange = (e) => {
     setUser(e.target.value);
-    setError({ ...error, user: false });
+    setError({...error, username: false});
   };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setError({ ...error, email: false });
+    setError({...error, email: false});
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    setError({ ...error, password: false });
+    setError({...error, password: false});
   };
 
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
-    setError({ ...error, confirmPassword: false });
+    setError({...error, confirmPassword: false});
   };
 
   const handleSubmit = (e) => {
@@ -60,30 +60,30 @@ export default function Register() {
     setRegisterError("");
 
     if (!usernameRef.current.value.length) {
-      setError({ ...error, username: true });
+      setError({...error, username: true});
       usernameRef.current.focus();
       return;
     }
 
     if (!emailRef.current.value.length) {
-      setError({ ...error, email: true });
+      setError({...error, email: true});
       emailRef.current.focus();
       return;
     }
 
     if (!passwordRef.current.value.length) {
-      setError({ ...error, password: true });
+      setError({...error, password: true});
       passwordRef.current.focus();
       return;
     }
     if (!confirmPasswordRef.current.value.length) {
-      setError({ ...error, confirmPassword: true });
+      setError((error) => ({...error, password: true, confirmPassword: true}));
       confirmPasswordRef.current.focus();
       return;
     }
 
     if (password !== confirmPassword) {
-      setError({ ...error, password: true, confirmPassword: true });
+      setError({...error, password: true, confirmPassword: true});
       passwordRef.current.focus();
       return;
     }
@@ -99,17 +99,25 @@ export default function Register() {
         password,
       }),
     })
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          const errorData = await res.json();
+          throw new Error(errorData.message || "Error en el registro");
+        }
+
+        return res.json();
+      })
       .then(() => {
         console.log("Usuario creado exitosamente");
         navigate("/");
       })
       .catch((err) => {
+        setRegisterError(err.message);
         console.error("Error en el login", err);
       });
   };
   return (
-    <main className="min-h-screen text-white flex flex-col items-center justify-center">
+    <div className="min-h-screen text-white flex flex-col items-center justify-center">
       <h1 className="text-2xl font-bold">Registrate!</h1>
       <form
         onSubmit={handleSubmit}
@@ -193,9 +201,9 @@ export default function Register() {
           type="submit"
           className="bg-[#7c00e2] text-white py-2 px-4 rounded-lg"
         >
-          Acceder
+          Registrarse
         </button>
       </form>
-    </main>
+    </div>
   );
 }

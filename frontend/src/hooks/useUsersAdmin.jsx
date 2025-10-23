@@ -14,7 +14,7 @@ export const useUsersAdmin = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
-      const admins = data.filter((e) => e.role == "admin");
+      const admins = data.filter((e) => e.role != "superadmin");
       setUsers(admins);
     } catch (error) {
       setUsers([]);

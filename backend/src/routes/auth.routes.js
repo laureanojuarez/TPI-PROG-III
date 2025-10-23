@@ -7,6 +7,8 @@ import {
   loginUser,
   registerUser,
   removeAdminRole,
+  setAdminRole,
+  changePassword,
 } from "../controllers/users.controller.js";
 import { verifyToken } from "../controllers/verify.controller.js";
 
@@ -17,9 +19,10 @@ router.post("/login", loginUser);
 router.get("/users", verifyToken, getUsers);
 router.get("/users/:id", verifyToken, getUserById);
 router.delete("/user/:id", verifyToken, removeAdminRole);
+router.put("/user/:id", verifyToken, setAdminRole);
 router.get("/me", verifyToken, getMe);
 router.get("/me/entradas", verifyToken, getMe);
-
+router.put("/user/:id/password", changePassword);
 router.put("/user/:id", verifyToken, changeProfile); // Actualizar perfil de usuario
 
 export default router;

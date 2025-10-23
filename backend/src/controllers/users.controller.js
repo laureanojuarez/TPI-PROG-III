@@ -102,6 +102,22 @@ export const removeAdminRole = async (req, res) => {
   }
 };
 
+export const setAdminRole = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findByPk(id);
+  try {
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    user.role = "admin";
+    await user.save();
+    res.json({ message: "Rol de administrador asignado" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error al asignar rol de administrador" });
+  }
+};
+
 export const getMe = async (req, res) => {
   const user = await User.findOne({
     where: { email: req.email },
@@ -126,7 +142,7 @@ export const getMe = async (req, res) => {
 
 export const changeProfile = async (req, res) => {
   const { id } = req.params;
-  const { username, email, age } = req.body;
+  const { username, email, password } = req.body;
 
   try {
     const user = await User.findByPk(id);
@@ -134,43 +150,48 @@ export const changeProfile = async (req, res) => {
       return res.status(404).json({ message: "Usuario no encontrado" });
     }
 
-    const existUsername = await User.findOne({
-      where: {
-        username: username,
-      },
-    });
-
-    if (existUsername && existUsername.id !== user.id) {
-      return res
-        .status(400)
-        .json({ message: "El nombre de usuario ya está en uso" });
-    }
-
-    const existEmail = await User.findOne({
-      where: {
-        email: email,
-      },
-    });
-
-    if (existEmail && existEmail.id !== user.id) {
-      return res.status(400).json({ message: "El email ya está en uso" });
-    }
-
     if (username !== undefined) {
-      user.username = username;
+      if (username.trim() === "") {
+        return res
+          .status(400)
+          .json({ message: "El nombre de usuario no puede estar vacío" });
+      }
+
+      if (username !== user.username) {
+        const existUsername = await User.findOne({
+          where: { username },
+        });
+        if (existUsername) {
+          return res
+            .status(400)
+            .json({ message: "El nombre de usuario ya está en uso" });
+        }
+        user.username = username;
+      }
     }
 
     if (email !== undefined) {
-      user.email = email;
-    }
-    if (age <= 18) {
-      return res
-        .status(400)
-        .json({ message: "La edad debe ser mayor a 18 años" });
+      if (email.trim() === "") {
+        return res
+          .status(400)
+          .json({ message: "El mail no puede estar vacío" });
+      }
+      if (email !== user.email) {
+        const existEmail = await User.findOne({ where: { email } });
+        if (existEmail && existEmail.id !== user.id) {
+          return res.status(400).json({ message: "El email ya está en uso" });
+        }
+        user.email = email;
+      }
     }
 
-    if (age !== undefined) {
-      user.age = age;
+    if (password !== undefined) {
+      if (password.trim() === "") {
+        return res
+          .status(400)
+          .json({ message: "La contraseña no puede estar vacía" });
+      }
+      user.password = await bcrypt.hash(password, 10);
     }
 
     await user.save();
@@ -178,5 +199,28 @@ export const changeProfile = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al actualizar el perfil" });
+  }
+};
+export const changePassword = async (req, res) => {
+  const { id } = req.params;
+  const { current, newPass } = req.body;
+
+  try {
+    const user = await User.findByPk(id);
+    if (!user)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+
+    const isMatch = await bcrypt.compare(current, user.password);
+    if (!isMatch)
+      return res
+        .status(401)
+        .json({ message: "La contraseña actual es incorrecta" });
+
+    user.password = await bcrypt.hash(newPass, 10);
+    await user.save();
+
+    res.json({ message: "Contraseña actualizada correctamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al cambiar la contraseña" });
   }
 };
