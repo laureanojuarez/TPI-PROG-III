@@ -1,14 +1,20 @@
-import { useContext, useState } from "react";
-import { PersonalData } from "../../components/userProfile/PersonalData";
-import { ChangePassword } from "../../components/userProfile/ChangePassword";
-import { useUserData } from "../../hooks/useUserData";
-import { AuthContext } from "../../services/auth/auth.context";
+import {useContext, useState} from "react";
+import {PersonalData} from "../../components/userProfile/PersonalData";
+import {ChangePassword} from "../../components/userProfile/ChangePassword";
+import {useUserData} from "../../hooks/useUserData";
+import {AuthContext} from "../../services/auth/auth.context";
+import {
+  validateEmail,
+  validatePassword,
+  validateString,
+} from "../Auth/auth.services";
 
 export default function UserProfile() {
   const [option, setOption] = useState("personal");
-  const { user, entradas, loading } = useUserData();
-  const { token } = useContext(AuthContext);
+  const {user, entradas, loading} = useUserData();
+  const {token} = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const updateProfile = async (userId, payload, token) => {
     const res = await fetch(`http://localhost:3000/auth/user/${userId}`, {
@@ -19,27 +25,54 @@ export default function UserProfile() {
       },
       body: JSON.stringify(payload),
     });
-    const data = res.json();
-    console.log("Profile updated:", data);
+    const data = await res.json();
     if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.message || "Error al actualizar el perfil");
+      throw new Error(data.message || "Error al actualizar el perfil");
     }
-    return await res.json();
+    return data;
   };
 
   const handleSave = async (payload) => {
     setErrorMsg("");
+    setSuccessMsg("");
+
+    if (payload.username && !validateString(payload.username, 3, 30)) {
+      setErrorMsg("El nombre de usuario debe tener entre 3 y 30 caracteres");
+      return;
+    }
+
+    if (payload.email && !validateEmail(payload.email)) {
+      setErrorMsg("El email no es válido");
+      return;
+    }
+
     try {
       await updateProfile(user.id, payload);
-      alert("Perfil actualizado correctamente");
+      setSuccessMsg("Perfil actualizado correctamente");
     } catch (error) {
       setErrorMsg(error.message || "Error al actualizar el perfil");
     }
   };
 
-  const handleChangePassword = async ({ current, newPass }) => {
+  const handleChangePassword = async (
+    {current, newPass, confirm},
+    clearFields
+  ) => {
     setErrorMsg("");
+    setSuccessMsg("");
+
+    if (newPass !== confirm) {
+      setErrorMsg("La nueva contraseña y la confirmación no coinciden");
+      return;
+    }
+
+    if (!validatePassword(newPass, 7, null, true, true)) {
+      setErrorMsg(
+        "La nueva contraseña debe tener al menos 7 caracteres, una letra mayúscula y un número"
+      );
+      return;
+    }
+
     try {
       const res = await fetch(
         `http://localhost:3000/auth/user/${user.id}/password`,
@@ -49,35 +82,17 @@ export default function UserProfile() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ current, newPass }),
+          body: JSON.stringify({current, newPass}),
         }
       );
       const data = await res.json();
-      if (!res.ok)
+      if (!res.ok) {
         throw new Error(data.message || "Error al cambiar la contraseña");
-      alert("Contraseña actualizada correctamente");
+      }
+      setSuccessMsg("Contraseña actualizada correctamente");
+      if (clearFields) clearFields();
     } catch (error) {
       setErrorMsg(error.message || "Error al cambiar la contraseña");
-    }
-  };
-
-  const handleSaveProfile = async (payload) => {
-    setErrorMsg("");
-    try {
-      const res = await fetch(`http://localhost:3000/auth/user/${user.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (!res.ok)
-        throw new Error(data.message || "Error al actualizar el perfil");
-      alert("Perfil actualizado correctamente");
-    } catch (error) {
-      setErrorMsg(error.message || "Error al actualizar el perfil");
     }
   };
 
@@ -91,7 +106,7 @@ export default function UserProfile() {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
-      <div className="w-full h-44 bg-gradient-to-r from-[#7c00e2] to-[#4b00b0] flex items-end">
+      <div className="w-full h-44 bg-linear-to-r from-[#7c00e2] to-[#4b00b0] flex items-end">
         <div className="max-w-5xl w-full mx-auto px-6 pb-6 flex flex-wrap items-end gap-4">
           <div className="text-white">
             <h2 className="text-2xl font-bold">{user.username ?? "Usuario"}</h2>
@@ -140,20 +155,26 @@ export default function UserProfile() {
 
         <main className="flex-1">
           <div className="bg-white rounded-lg shadow p-6 min-h-[300px]">
+            {successMsg && (
+              <div className="mb-4 text-green-600 font-semibold">
+                {successMsg}
+              </div>
+            )}
+            {errorMsg && (
+              <div className="mb-4 text-red-600 font-semibold">{errorMsg}</div>
+            )}
             {option === "personal" && (
-              <>
-                {errorMsg && (
-                  <div className="mb-4 text-red-600 font-semibold">
-                    {errorMsg}
-                  </div>
-                )}
-                <PersonalData data={user} onSave={handleSave} />
-              </>
+              <PersonalData
+                data={user}
+                onSave={handleSave}
+                errorMsg={errorMsg}
+              />
             )}
             {option === "security" && (
               <ChangePassword
                 data={user}
                 onChangePassword={handleChangePassword}
+                errorMsg={errorMsg}
               />
             )}
             {option === "events" && (

@@ -1,25 +1,25 @@
-import { useState } from "react";
+import {useState} from "react";
 
-export const ChangePassword = ({ data, onChangePassword }) => {
+export const ChangePassword = ({onChangePassword, errorMsg}) => {
   const [current, setCurrent] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confirm, setConfirm] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (newPass !== confirm) {
-      alert("La nueva contraseña no coincide");
-      return;
-    }
-    if (onChangePassword) onChangePassword({ current, newPass });
-    setCurrent("");
-    setNewPass("");
-    setConfirm("");
+    if (onChangePassword)
+      onChangePassword({current, newPass, confirm}, () => {
+        setCurrent("");
+        setNewPass("");
+        setConfirm("");
+      });
   };
   return (
     <form onSubmit={handleSubmit} className="p-8 flex-1 max-w-md">
       <h3 className="text-xl font-semibold mb-4">Cambiar contraseña</h3>
-
+      {errorMsg && (
+        <div className="mb-4 text-red-600 font-semibold">{errorMsg}</div>
+      )}
       <div className="mb-3">
         <label className="block text-sm text-gray-600 mb-1">
           Contraseña actual
