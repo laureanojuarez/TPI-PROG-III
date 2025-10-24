@@ -1,6 +1,6 @@
 import {useState} from "react";
 
-export const ChangePassword = ({onChangePassword, errorMsg}) => {
+export const ChangePassword = ({onChangePassword}) => {
   const [current, setCurrent] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -17,9 +17,7 @@ export const ChangePassword = ({onChangePassword, errorMsg}) => {
   return (
     <form onSubmit={handleSubmit} className="p-8 flex-1 max-w-md">
       <h3 className="text-xl font-semibold mb-4">Cambiar contraseña</h3>
-      {errorMsg && (
-        <div className="mb-4 text-red-600 font-semibold">{errorMsg}</div>
-      )}
+
       <div className="mb-3">
         <label className="block text-sm text-gray-600 mb-1">
           Contraseña actual

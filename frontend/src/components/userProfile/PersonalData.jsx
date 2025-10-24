@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 
-export const PersonalData = ({data, onSave, errorMsg}) => {
+export const PersonalData = ({data, onSave}) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [editing, setEditing] = useState(false);
@@ -31,9 +31,7 @@ export const PersonalData = ({data, onSave, errorMsg}) => {
       className="p-8 flex flex-col gap-6 w-full max-w-3xl"
     >
       <h3 className="text-xl font-semibold mb-2">Información Personal</h3>
-      {errorMsg && (
-        <div className="mb-4 text-red-600 font-semibold">{errorMsg}</div>
-      )}
+
       <div className="flex flex-col md:flex-row gap-4 items-start">
         <label htmlFor="userName" className="w-40 text-sm text-gray-700">
           Nombre de usuario:

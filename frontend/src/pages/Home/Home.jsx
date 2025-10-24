@@ -1,9 +1,9 @@
-import { EventSection } from "../../components/Events/EventSection";
-import { Search } from "../../components/searchComponent/Search";
+import {EventSection} from "../../components/Events/EventSection";
+import {Search} from "../../components/searchComponent/Search";
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="p-2 w-full">
+      <div className="p-2 w-full bg-black">
         <Search />
       </div>
       <EventSection />

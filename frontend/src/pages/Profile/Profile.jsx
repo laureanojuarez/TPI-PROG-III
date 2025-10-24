@@ -1,8 +1,10 @@
 import {useContext, useState} from "react";
 import {PersonalData} from "../../components/userProfile/PersonalData";
 import {ChangePassword} from "../../components/userProfile/ChangePassword";
-import {useUserData} from "../../hooks/useUserData";
 import {AuthContext} from "../../services/auth/auth.context";
+import {Link} from "react-router-dom";
+import {Settings, ShieldCheck} from "lucide-react";
+
 import {
   validateEmail,
   validatePassword,
@@ -11,12 +13,11 @@ import {
 
 export default function UserProfile() {
   const [option, setOption] = useState("personal");
-  const {user, entradas, loading} = useUserData();
-  const {token} = useContext(AuthContext);
+  const {user, token} = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  const updateProfile = async (userId, payload, token) => {
+  const updateProfile = async (userId, payload) => {
     const res = await fetch(`http://localhost:3000/auth/user/${userId}`, {
       method: "PUT",
       headers: {
@@ -96,13 +97,15 @@ export default function UserProfile() {
     }
   };
 
-  if (loading || !user) {
+  if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <span className="text-xl text-gray-600">Cargando perfil...</span>
       </div>
     );
   }
+
+  const entradas = user.detalle_venta || [];
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
@@ -113,6 +116,29 @@ export default function UserProfile() {
             <p className="text-sm opacity-90">
               {user.email ?? "usuario@ejemplo.com"}
             </p>
+            <span className="inline-block bg-white/20 text-white px-3 py-1 rounded-full text-xs font-semibold mt-2">
+              Rol: {user.role}
+            </span>
+          </div>
+          <div className="flex flex-col gap-2 md:items-end ml-auto">
+            {(user.role === "admin" || user.role === "superadmin") && (
+              <Link
+                to="/admin"
+                className="py-2.5 px-8 bg-slate-800 text-white rounded-md font-medium hover:bg-slate-700 transition-all text-center shadow-md border border-slate-700 flex items-center gap-2 justify-center"
+              >
+                <Settings size={16} />
+                <span>Panel Admin</span>
+              </Link>
+            )}
+            {user.role === "superadmin" && (
+              <Link
+                to="/superadmin"
+                className="py-2.5 px-8 bg-zinc-900 text-white rounded-md font-medium hover:bg-zinc-800 transition-all text-center shadow-md border border-zinc-800 flex items-center gap-2 justify-center"
+              >
+                <ShieldCheck size={16} />
+                <span>Panel Super Admin</span>
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -164,25 +190,18 @@ export default function UserProfile() {
               <div className="mb-4 text-red-600 font-semibold">{errorMsg}</div>
             )}
             {option === "personal" && (
-              <PersonalData
-                data={user}
-                onSave={handleSave}
-                errorMsg={errorMsg}
-              />
+              <PersonalData data={user} onSave={handleSave} />
             )}
             {option === "security" && (
               <ChangePassword
                 data={user}
                 onChangePassword={handleChangePassword}
-                errorMsg={errorMsg}
               />
             )}
             {option === "events" && (
               <div>
                 <h3 className="text-lg font-semibold mb-4">Mis eventos</h3>
-                {loading ? (
-                  <p className="text-gray-500">Cargando entradas...</p>
-                ) : entradas.length === 0 ? (
+                {entradas.length === 0 ? (
                   <p className="text-gray-500">No tienes entradas.</p>
                 ) : (
                   <ul>

@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { filterSearch } from "./filterSearch";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {filterSearch} from "./filterSearch";
+import {useNavigate} from "react-router-dom";
 
 export const Search = () => {
   const [input, setInput] = useState("");
@@ -11,13 +11,13 @@ export const Search = () => {
       const results = await filterSearch(input);
 
       if (results) {
-        navigate("/resultados", { state: { resultados: results } });
+        navigate("/resultados", {state: {resultados: results}});
       }
       console.log(results);
     }
   };
   return (
-    <div className="w-full pb-8 pt-10 flex  items-center max-w-2xl mx-auto">
+    <div className="w-full pb-8 pt-10 flex  items-center max-w-2xl mx-auto bg-black ">
       <label htmlFor="search" className="sr-only">
         Buscar evento o artista
       </label>
@@ -34,7 +34,7 @@ export const Search = () => {
           if (input.trim() !== "") {
             const results = await filterSearch(input);
             if (results) {
-              navigate("/resultados", { state: { resultados: results } });
+              navigate("/resultados", {state: {resultados: results}});
             }
           }
         }}

@@ -23,8 +23,8 @@ router.get("/me/entradas", verifyToken, getMe); // Obtener entradas del usuario 
 router.get("/users", verifyToken, getUsers); // Obtener todos los usuarios
 router.get("/users/:id", verifyToken, getUserById); // Obtener usuario por ID
 
-router.delete("/user/:id", verifyToken, removeAdminRole); // Eliminar rol de administrador
-router.put("/user/:id", verifyToken, setAdminRole); // Asignar rol de administrador
+router.delete("/user/:id/admin", verifyToken, removeAdminRole); // Eliminar rol de administrador
+router.put("/user/:id/admin", verifyToken, setAdminRole); // Asignar rol de administrador
 
 router.put("/user/:id", verifyToken, changeProfile); // Actualizar perfil de usuario
 router.put("/user/:id/password", verifyToken, changePassword); // Cambiar contraseña de usuario
