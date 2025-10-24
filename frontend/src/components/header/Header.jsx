@@ -13,7 +13,7 @@ export const Header = () => {
 
   return (
     <>
-      <header className="fixed w-full bg-black/70 backdrop-blur-sm z-10 py-3 flex items-center justify-between px-6 shadow  ">
+      <header className="fixed w-full bg-black/60 backdrop-blur-sm z-10 flex items-center justify-between px-6 py-3 shadow  ">
         <Link to="/" className="cursor-pointer flex items-center gap-2">
           <img src={logoMain} alt="Logo" className="h-12 w-auto" />
         </Link>
@@ -118,7 +118,7 @@ export const Header = () => {
           )}
         </ul>
       </nav>
-      <div className="h-20" /> {/* Espaciador para el header fijo */}
+      <div className="h-18" /> {/* Espaciador para el header fijo */}
     </>
   );
 };

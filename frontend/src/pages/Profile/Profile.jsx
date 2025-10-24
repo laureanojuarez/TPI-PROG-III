@@ -1,16 +1,23 @@
 import {useContext, useState} from "react";
 import {PersonalData} from "../../components/userProfile/PersonalData";
 import {ChangePassword} from "../../components/userProfile/ChangePassword";
-import {useUserData} from "../../hooks/useUserData";
 import {AuthContext} from "../../services/auth/auth.context";
+import {Link} from "react-router-dom";
+import {Settings, ShieldCheck} from "lucide-react";
+
+import {
+  validateEmail,
+  validatePassword,
+  validateString,
+} from "../Auth/auth.services";
 
 export default function UserProfile() {
   const [option, setOption] = useState("personal");
-  const {user, entradas, loading} = useUserData();
-  const {token} = useContext(AuthContext);
+  const {user, token} = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
-  const updateProfile = async (userId, payload, token) => {
+  const updateProfile = async (userId, payload) => {
     const res = await fetch(`http://localhost:3000/auth/user/${userId}`, {
       method: "PUT",
       headers: {
@@ -19,24 +26,78 @@ export default function UserProfile() {
       },
       body: JSON.stringify(payload),
     });
+    const data = await res.json();
     if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.message || "Error al actualizar el perfil");
+      throw new Error(data.message || "Error al actualizar el perfil");
     }
-    return await res.json();
+    return data;
   };
 
   const handleSave = async (payload) => {
     setErrorMsg("");
+    setSuccessMsg("");
+
+    if (payload.username && !validateString(payload.username, 3, 30)) {
+      setErrorMsg("El nombre de usuario debe tener entre 3 y 30 caracteres");
+      return;
+    }
+
+    if (payload.email && !validateEmail(payload.email)) {
+      setErrorMsg("El email no es válido");
+      return;
+    }
+
     try {
       await updateProfile(user.id, payload);
-      alert("Perfil actualizado correctamente");
+      setSuccessMsg("Perfil actualizado correctamente");
     } catch (error) {
       setErrorMsg(error.message || "Error al actualizar el perfil");
     }
   };
 
-  if (loading || !user) {
+  const handleChangePassword = async (
+    {current, newPass, confirm},
+    clearFields
+  ) => {
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    if (newPass !== confirm) {
+      setErrorMsg("La nueva contraseña y la confirmación no coinciden");
+      return;
+    }
+
+    if (!validatePassword(newPass, 7, null, true, true)) {
+      setErrorMsg(
+        "La nueva contraseña debe tener al menos 7 caracteres, una letra mayúscula y un número"
+      );
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `http://localhost:3000/auth/user/${user.id}/password`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({current, newPass}),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || "Error al cambiar la contraseña");
+      }
+      setSuccessMsg("Contraseña actualizada correctamente");
+      if (clearFields) clearFields();
+    } catch (error) {
+      setErrorMsg(error.message || "Error al cambiar la contraseña");
+    }
+  };
+
+  if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <span className="text-xl text-gray-600">Cargando perfil...</span>
@@ -44,15 +105,40 @@ export default function UserProfile() {
     );
   }
 
+  const entradas = user.detalle_venta || [];
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
-      <div className="w-full h-44 bg-gradient-to-r from-[#7c00e2] to-[#4b00b0] flex items-end">
+      <div className="w-full h-44 bg-linear-to-r from-[#7c00e2] to-[#4b00b0] flex items-end">
         <div className="max-w-5xl w-full mx-auto px-6 pb-6 flex flex-wrap items-end gap-4">
           <div className="text-white">
             <h2 className="text-2xl font-bold">{user.username ?? "Usuario"}</h2>
             <p className="text-sm opacity-90">
               {user.email ?? "usuario@ejemplo.com"}
             </p>
+            <span className="inline-block bg-white/20 text-white px-3 py-1 rounded-full text-xs font-semibold mt-2">
+              Rol: {user.role}
+            </span>
+          </div>
+          <div className="flex flex-col gap-2 md:items-end ml-auto">
+            {(user.role === "admin" || user.role === "superadmin") && (
+              <Link
+                to="/admin"
+                className="py-2.5 px-8 bg-slate-800 text-white rounded-md font-medium hover:bg-slate-700 transition-all text-center shadow-md border border-slate-700 flex items-center gap-2 justify-center"
+              >
+                <Settings size={16} />
+                <span>Panel Admin</span>
+              </Link>
+            )}
+            {user.role === "superadmin" && (
+              <Link
+                to="/superadmin"
+                className="py-2.5 px-8 bg-zinc-900 text-white rounded-md font-medium hover:bg-zinc-800 transition-all text-center shadow-md border border-zinc-800 flex items-center gap-2 justify-center"
+              >
+                <ShieldCheck size={16} />
+                <span>Panel Super Admin</span>
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -95,28 +181,27 @@ export default function UserProfile() {
 
         <main className="flex-1">
           <div className="bg-white rounded-lg shadow p-6 min-h-[300px]">
+            {successMsg && (
+              <div className="mb-4 text-green-600 font-semibold">
+                {successMsg}
+              </div>
+            )}
+            {errorMsg && (
+              <div className="mb-4 text-red-600 font-semibold">{errorMsg}</div>
+            )}
             {option === "personal" && (
-              <>
-                {errorMsg && (
-                  <div className="mb-4 text-red-600 font-semibold">
-                    {errorMsg}
-                  </div>
-                )}
-                <PersonalData data={user} onSave={handleSave} />
-              </>
+              <PersonalData data={user} onSave={handleSave} />
             )}
             {option === "security" && (
               <ChangePassword
                 data={user}
-                onChangePassword={(p) => console.log("change password", p)}
+                onChangePassword={handleChangePassword}
               />
             )}
             {option === "events" && (
               <div>
                 <h3 className="text-lg font-semibold mb-4">Mis eventos</h3>
-                {loading ? (
-                  <p className="text-gray-500">Cargando entradas...</p>
-                ) : entradas.length === 0 ? (
+                {entradas.length === 0 ? (
                   <p className="text-gray-500">No tienes entradas.</p>
                 ) : (
                   <ul>
