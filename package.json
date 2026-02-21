@@ -1,13 +1,17 @@
 {
-  "name": "backend",
+  "name": "tpi-prog-iii",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "node --watch src/index.js --workspace=backend"
   },
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/laureanojuarez/TPI-PROG-III.git"
@@ -15,18 +19,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
+  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/laureanojuarez/TPI-PROG-III/issues"
   },
-  "homepage": "https://github.com/laureanojuarez/TPI-PROG-III#readme",
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
-    "morgan": "^1.10.1",
-    "sequelize": "^6.37.7",
-    "sqlite3": "^5.1.7"
-  }
+  "homepage": "https://github.com/laureanojuarez/TPI-PROG-III#readme"
 }
